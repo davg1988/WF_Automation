@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results skipped="0" failed="0" total="7" passed="7">
+  <reporter-output>
+  </reporter-output>
+  <suite name="Default suite" duration-ms="93688" started-at="2018-06-15T17:51:17Z" finished-at="2018-06-15T17:52:51Z">
+    <groups>
+    </groups>
+    <test name="Default test" duration-ms="93688" started-at="2018-06-15T17:51:17Z" finished-at="2018-06-15T17:52:51Z">
+      <class name="abmPosOperator.CrearModificarEliminarUsuario">
+        <test-method status="PASS" signature="launchWF()[pri:0, instance:abmPosOperator.CrearModificarEliminarUsuario@7dc7cbad]" name="launchWF" duration-ms="16641" started-at="2018-06-15T14:51:17Z" finished-at="2018-06-15T14:51:34Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- launchWF -->
+        <test-method status="PASS" signature="createTestUser()[pri:0, instance:abmPosOperator.CrearModificarEliminarUsuario@7dc7cbad]" name="createTestUser" duration-ms="14645" started-at="2018-06-15T14:51:34Z" finished-at="2018-06-15T14:51:48Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- createTestUser -->
+        <test-method status="PASS" signature="goToMantenimientoUsuarios()[pri:0, instance:abmPosOperator.CrearModificarEliminarUsuario@7dc7cbad]" name="goToMantenimientoUsuarios" duration-ms="15825" started-at="2018-06-15T14:51:48Z" finished-at="2018-06-15T14:52:04Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- goToMantenimientoUsuarios -->
+        <test-method status="PASS" signature="insertNewUser()[pri:0, instance:abmPosOperator.CrearModificarEliminarUsuario@7dc7cbad]" name="insertNewUser" duration-ms="15365" started-at="2018-06-15T14:52:04Z" finished-at="2018-06-15T14:52:20Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- insertNewUser -->
+        <test-method status="PASS" signature="modifyUser()[pri:0, instance:abmPosOperator.CrearModificarEliminarUsuario@7dc7cbad]" name="modifyUser" duration-ms="15226" started-at="2018-06-15T14:52:20Z" finished-at="2018-06-15T14:52:35Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- modifyUser -->
+        <test-method status="PASS" signature="deleteUser()[pri:0, instance:abmPosOperator.CrearModificarEliminarUsuario@7dc7cbad]" name="deleteUser" duration-ms="5318" started-at="2018-06-15T14:52:35Z" finished-at="2018-06-15T14:52:40Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- deleteUser -->
+        <test-method status="PASS" signature="deleteTestUser()[pri:0, instance:abmPosOperator.CrearModificarEliminarUsuario@7dc7cbad]" name="deleteTestUser" duration-ms="10656" started-at="2018-06-15T14:52:40Z" finished-at="2018-06-15T14:52:51Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- deleteTestUser -->
+      </class> <!-- abmPosOperator.CrearModificarEliminarUsuario -->
+    </test> <!-- Default test -->
+  </suite> <!-- Default suite -->
+</testng-results>
