@@ -145,7 +145,7 @@ public class ValidacionCampoNombre {
 			Assert.assertEquals("Error", window_message);
 			
 			//Click on OK
-			ScreenShot.takeSnapShot(driver, "Evidencia\\AbmPosOperator\\CrearModificarEliminarUsuario\\"+ tc + count +".png");
+			ScreenShot.takeSnapShot(driver, "Evidencia\\AbmPosOperator\\ValidacionCampoNombre\\"+ tc + count +".png");
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='z-messagebox-window z-window-highlighted z-window-highlighted-shadow']//*[@class='z-messagebox-btn z-button-os']"))).click();
 			
 			//Click on Cancelar
