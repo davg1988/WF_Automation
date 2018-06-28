@@ -23,7 +23,7 @@ import utilidades.ScreenShot;
 import utilidades.UsefulMethodsWF;
 import webFrontCommonUtils.RServiceClientFactory;
 
-public class ValidacionCampoNombre {
+public class ValidacionCampos {
 
 	public WebDriver driver;
 	public WebDriverWait wait;
@@ -38,7 +38,7 @@ public class ValidacionCampoNombre {
 		//Extracting parameters from Excel file
 		fl = new File("Parametros\\AbmOperadoresPos\\Parametros.xls");
 		wb = Workbook.getWorkbook(fl);
-		sh = wb.getSheet("ValidarCampoNombre");
+		sh = wb.getSheet("ValidarCampos");
 		String url = sh.getCell(1,2).getContents();
 		
 		//Setting options to launch Chrome web browser
@@ -108,7 +108,7 @@ public class ValidacionCampoNombre {
 	}
 	
 	@Test (priority=4)
-	public void validateNameField() throws Exception {
+	public void validateFields() throws Exception {
 
 		int count = 1;
 		for (int i = 10; i < sh.getRows(); i++) {
@@ -137,6 +137,12 @@ public class ValidacionCampoNombre {
 			driver.findElement(By.xpath("//*[@class='z-longbox']")).clear();
 			driver.findElement(By.xpath("//*[@class='z-longbox z-longbox-focus']")).sendKeys(login);
 			
+			if(role.equals("Supervisor")) {
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='z-intbox' and @maxlength='3']"))).clear();
+				String level = sh.getCell(4, i).getContents();
+				driver.findElement(By.xpath("//*[@class='z-intbox z-intbox-focus']")).sendKeys(level);
+			}
+			
 			//Click on Confirmar button
 			driver.findElement(By.xpath("//*[@class='z-button-cm' and text()=' Confirmar']")).click();
 			String window_message = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath
@@ -145,7 +151,7 @@ public class ValidacionCampoNombre {
 			Assert.assertEquals("Error", window_message);
 			
 			//Click on OK
-			ScreenShot.takeSnapShot(driver, "Evidencia\\AbmPosOperator\\ValidacionCampoNombre\\"+ tc + count +".png");
+			ScreenShot.takeSnapShot(driver, "Evidencia\\AbmPosOperator\\ValidacionCampos\\"+ tc + count +".png");
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='z-messagebox-window z-window-highlighted z-window-highlighted-shadow']//*[@class='z-messagebox-btn z-button-os']"))).click();
 			
 			//Click on Cancelar
