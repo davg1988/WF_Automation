@@ -157,7 +157,7 @@ public class CrearModificarEliminarUsuario {
 			modified_login = sh.getCell(7,i).getContents();
 			tc = sh.getCell(8,i).getContents();	
 			
-			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='z-listcell-cnt z-overflow-hidden' and text()='"+actual_name+"']"))).click();
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='z-listcell-cnt z-overflow-hidden' and text()=\""+actual_name+"\"]"))).click();
 			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@class='z-button-cm' and text()=' Modificar']"))).click();
 			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@class='z-textbox' and @maxlength='20']"))).clear();
 			driver.findElement(By.xpath("//*[@class='z-textbox z-textbox-focus' and @maxlength='20']")).sendKeys(modified_name);
@@ -289,7 +289,8 @@ public class CrearModificarEliminarUsuario {
 	public static void verificationCreatedUser(String username, String login, RServiceClientFactory factory, WebDriver driver, String long_login, int line) throws SQLException, IOException {
 		
 		//Verification on WF
-		Assert.assertEquals(true, driver.findElement(By.xpath("//*[@class='z-listcell-cnt z-overflow-hidden' and text()='"+username+"']")).isDisplayed());
+		//Assert.assertEquals(true, driver.findElement(By.xpath("//*[@class='z-listcell-cnt z-overflow-hidden' and text()='"+username+"']")).isDisplayed());
+		Assert.assertEquals(true, driver.findElement(By.xpath("//*[@class='z-listcell-cnt z-overflow-hidden' and text()=\""+username+"\"]")).isDisplayed());
 		
 		//Verification on CTL File
 		Assert.assertEquals(factory.getCTLFunction(line).getName().substring(0, username.length()), username);
