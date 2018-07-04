@@ -52,6 +52,7 @@ public class HabilitarDeshabilitar {
 		ChromeOptions op = new ChromeOptions();
 		op.addArguments("--start-maximized");
 		driver = new ChromeDriver(op);
+		wait = new WebDriverWait(driver,20);
 		driver.get(url);
 		
 		//Setting IP for rest service
@@ -66,9 +67,7 @@ public class HabilitarDeshabilitar {
 		String adminUser = sh.getCell(1,5).getContents();
 		String adminPass = sh.getCell(2,5).getContents();
 		
-		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@title='Introduzca el Nombre de Usuario']"))).sendKeys(adminUser);
-		driver.findElement(By.xpath("//*[@class='textlogin z-textbox' and @title='Tipee la Contraseña del Usuario']")).sendKeys(adminPass);
-		driver.findElement(By.xpath("//*[@class='z-button-cm' and text()=' Confirmar']")).click();
+		UsefulMethodsWF.loginWF(driver, adminUser, adminPass);
 		
 		//Click on Gestion Login
 		wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(By.xpath("//*[@class='z-toolbarbutton-cnt']"),1)).get(1).click();
@@ -117,13 +116,13 @@ public class HabilitarDeshabilitar {
 		
 		long_login = sh.getCell(1,8).getContents();
 		
-		for (int i = 11; i < sh.getRows(); i++) {
+		for (int i = 12; i < sh.getRows(); i++) {
 			
 			// Obtain Parameters From Excel File
 			String role, username, login;
-			role = sh.getCell(1,i).getContents();
-			username = sh.getCell(2,i).getContents();
-			login = sh.getCell(3,i).getContents();
+			role = sh.getCell(0,i).getContents();
+			username = sh.getCell(1,i).getContents();
+			login = sh.getCell(2,i).getContents();
 			
 			// Determines the number of the line available to register a new operator
 			// This is used to locate the created user on the verification of CTL file
@@ -132,24 +131,22 @@ public class HabilitarDeshabilitar {
 			
 			//Insertion of new user
 			CrearModificarEliminarUsuario.createPosOperator(driver, role, username, login);
-			
-			//Verification of created user
-			CrearModificarEliminarUsuario.verificationCreatedUser(username, login, factory, driver, long_login, line);
 		}		
 	}
 
 	@Test (priority = 9)
-	public void disablePosOperator() throws IOException {
+	public void disablePosOperator() throws Exception {
 		
 		int cont_icons = 2;
 		int cont_registers = 0;
 		
-		for(int i = 11; i < sh.getRows(); i++) {
+		for(int i = 12; i < sh.getRows(); i++) {
 			String name = sh.getCell(2,i).getContents();
-			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='z-listcell-cnt z-overflow-hidden' and text()='"+name+"']"))).click();
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='z-listcell-cnt z-overflow-hidden' and text()=\""+name+"\"]"))).click();
 			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@class='z-button-cm'and text()=' Deshabilitar']"))).click();
 			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@class='z-messagebox-btn z-button-os' and text()='Yes']"))).click();
 			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@class='z-window-highlighted-cnt']//*[@class='z-messagebox-btn z-button-os' and text()='OK']"))).click();
+			ScreenShot.takeSnapShot(driver, "Evidencia\\AbmPosOperator\\HabilitarDeshabilitar\\deshabilitar"+(i-11)+".png");
 			
 			//Verification of lock field, must change to 1
 			Assert.assertEquals(factory.getCTLFunction(registers.get(cont_registers)).getLockIndicator(), "1");
@@ -163,17 +160,18 @@ public class HabilitarDeshabilitar {
 	}
 	
 	@Test (priority = 11)
-	public void enablePosOperator() throws IOException {
+	public void enablePosOperator() throws Exception {
 		
 		int cont_icons = 2;
 		int cont_registers = 0;
 		
-		for(int i = 11; i < sh.getRows(); i++) {
+		for(int i = 12; i < sh.getRows(); i++) {
 			String name = sh.getCell(2,i).getContents();
-			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='z-listcell-cnt z-overflow-hidden' and text()='"+name+"']"))).click();
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='z-listcell-cnt z-overflow-hidden' and text()=\""+name+"\"]"))).click();
 			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@class='z-button-cm'and text()=' Habilitar']"))).click();
 			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@class='z-messagebox-btn z-button-os' and text()='Yes']"))).click();
 			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@class='z-window-highlighted-cnt']//*[@class='z-messagebox-btn z-button-os' and text()='OK']"))).click();
+			ScreenShot.takeSnapShot(driver, "Evidencia\\AbmPosOperator\\HabilitarDeshabilitar\\habilitar"+(i-11)+".png");
 			
 			//Verification of lock field, must change to 1
 			Assert.assertEquals(factory.getCTLFunction(registers.get(cont_registers)).getLockIndicator(), "0");
@@ -189,12 +187,9 @@ public class HabilitarDeshabilitar {
 	@Test (priority=13)
 	public void deleteUser() throws Exception {
 		
-		int count = 1;
-		for (int i = 11; i < sh.getRows(); i++) {
+		for (int i = 12; i < sh.getRows(); i++) {
 			String name = sh.getCell(2,i).getContents();
 			CrearModificarEliminarUsuario.deletePosOperator(driver, name);
-			ScreenShot.takeSnapShot(driver, "Evidencia\\AbmPosOperator\\CrearModificarEliminarUsuario\\EliminarUsuario"+ count +".png");
-			count++;
 		}
 		UsefulMethodsWF.logoutWF(driver);
 	}
