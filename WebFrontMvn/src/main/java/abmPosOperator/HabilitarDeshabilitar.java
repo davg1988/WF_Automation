@@ -142,10 +142,7 @@ public class HabilitarDeshabilitar {
 		
 		for(int i = 12; i < sh.getRows(); i++) {
 			String name = sh.getCell(2,i).getContents();
-			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='z-listcell-cnt z-overflow-hidden' and text()=\""+name+"\"]"))).click();
-			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@class='z-button-cm'and text()=' Deshabilitar']"))).click();
-			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@class='z-messagebox-btn z-button-os' and text()='Yes']"))).click();
-			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@class='z-window-highlighted-cnt']//*[@class='z-messagebox-btn z-button-os' and text()='OK']"))).click();
+			disableOperator(driver, name);
 			ScreenShot.takeSnapShot(driver, "Evidencia\\AbmPosOperator\\HabilitarDeshabilitar\\deshabilitar"+(i-11)+".png");
 			
 			//Verification of lock field, must change to 1
@@ -230,6 +227,17 @@ public class HabilitarDeshabilitar {
 		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@class='z-window-highlighted-cnt']//*[@class='z-messagebox-btn z-button-os' and text()='Yes']"))).click();
 		UsefulMethodsWF.logoutWF(driver);
 		driver.close();
+	}
+	
+	// **************************** METHODS USED IN THE CLASS *************************************
+	
+	public static void disableOperator(WebDriver driver, String name) {
+		
+		WebDriverWait wait = new WebDriverWait(driver, 20);
+		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='z-listcell-cnt z-overflow-hidden' and text()=\""+name+"\"]"))).click();
+		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@class='z-button-cm'and text()=' Deshabilitar']"))).click();
+		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@class='z-messagebox-btn z-button-os' and text()='Yes']"))).click();
+		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@class='z-window-highlighted-cnt']//*[@class='z-messagebox-btn z-button-os' and text()='OK']"))).click();
 	}
 	
 }
