@@ -30,7 +30,6 @@ public class Test {
 		try {
 			rFactory.getLANFunction(99999);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -49,7 +48,6 @@ public class Test {
 			System.out.println("Get Modified line Cashier Name: " + ctlLine.getName());
 			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
