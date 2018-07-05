@@ -3,17 +3,11 @@
 <suite name="Failed suite [Default suite]">
   <test name="Default test(failed)">
     <classes>
-      <class name="abmPosOperator.HabilitarDeshabilitar">
+      <class name="abmPosOperator.Desbloquear">
         <methods>
-          <include name="deleteTestUser"/>
-          <include name="createTestUser"/>
-          <include name="deleteUser"/>
-          <include name="disablePosOperator"/>
-          <include name="goToMantenimientoUsuarios"/>
-          <include name="enablePosOperator"/>
-          <include name="insertNewUser"/>
+          <include name="insertNewUsers"/>
         </methods>
-      </class> <!-- abmPosOperator.HabilitarDeshabilitar -->
+      </class> <!-- abmPosOperator.Desbloquear -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->
