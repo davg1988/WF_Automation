@@ -4,12 +4,17 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.Test;
 
 import jxl.Sheet;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
 import utilidades.Environment;
+import utilidades.UsefulMethodsWF;
 import webFrontCommonUtils.CTLLine;
 import webFrontCommonUtils.UServiceClientFactory;
 
@@ -20,6 +25,11 @@ public class SinCodigoLibre {
 	Workbook wb;
 	Sheet sh;
 	
+	//Objects to handle the browser
+	WebDriver driver;
+	WebDriverWait wait;
+	String url = "";
+	
 	UServiceClientFactory uFactory;
 	
 	@Test (priority=1)
@@ -29,7 +39,7 @@ public class SinCodigoLibre {
 		wb = Workbook.getWorkbook(fl);
 		sh = wb.getSheet("SinCodigoLibre");
 		
-		String url = sh.getCell(1, 2).getContents();
+		url = sh.getCell(1, 2).getContents();
 		Environment.setEnv_ip(url);
 		
 		String long_login = sh.getCell(1, 8).getContents();
@@ -80,6 +90,25 @@ public class SinCodigoLibre {
 	}
 	
 	@Test (priority=2)
+	public void launchBrowser() {
+		
+		System.setProperty("webdriver.chrome.driver", "ChromeDriver\\chromedriver.exe");
+		ChromeOptions op = new ChromeOptions();
+		op.addArguments("--start-maximized");
+		driver = new ChromeDriver(op);
+		wait = new WebDriverWait(driver, 20);
+		driver.get(url);
+	}
+
+	public void createWFUser() {
+		
+		String adminUser = sh.getCell(1, 5).getContents();
+		String adminPass = sh.getCell(2, 5).getContents();
+		
+		UsefulMethodsWF.loginWF(driver, adminUser, adminPass);
+	}
+	
+	@Test (priority=10)
 	public void emptyCTL() throws IOException {
 		
 		//Loop to delete cashiers from CTL
@@ -88,6 +117,7 @@ public class SinCodigoLibre {
 			String operator_code = StringUtils.leftPad(String.valueOf(i), 4, "0");
 			
 			CTLLine line = new CTLLine(operator_code);
+			line.setLockIndicator("1");
 			uFactory.updateCTLLine(line);
 		}
 		
