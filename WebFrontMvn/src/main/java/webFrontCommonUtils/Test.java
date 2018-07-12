@@ -10,7 +10,7 @@ public class Test {
 	private static RServiceClientFactory rFactory = new RServiceClientFactory();
 	
 	public static void main(String[] args) {
-		final String operator = "9999";
+		final String operator = "0004";
 		
 		getLanFile();
 		
