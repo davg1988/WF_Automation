@@ -9,90 +9,95 @@ import org.testng.annotations.Test;
 import jxl.Sheet;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
+import utilidades.Environment;
 import webFrontCommonUtils.CTLLine;
 import webFrontCommonUtils.UServiceClientFactory;
 
 public class SinCodigoLibre {
 	
-	//Objects to get parameters
+	//Objects to handle parameters
+	File fl;
 	Workbook wb;
 	Sheet sh;
-	File fl;
-	String long_login = "";
 	
 	UServiceClientFactory uFactory;
-
-	//Fill CTL with 799 cashiers and 99 supervisors
+	
 	@Test (priority=1)
 	public void fillCTL() throws BiffException, IOException {
 		
-		//Initializing objects
 		fl = new File("Parametros\\AbmOperadoresPos\\Parametros.xls");
 		wb = Workbook.getWorkbook(fl);
-		sh = wb.getSheet("SinCodigoLibre");	
+		sh = wb.getSheet("SinCodigoLibre");
 		
-		//Long of the personnel number to be used
-		long_login = sh.getCell(1,8).getContents();
+		String url = sh.getCell(1, 2).getContents();
+		Environment.setEnv_ip(url);
 		
-		//Data of the cashiers to be created
-		String name_cashier = "";
-		String personnel_num = "";
+		String long_login = sh.getCell(1, 8).getContents();
 		
-		//Loop to create cashiers
-		for(int i = 3; i<800; i++) {
-			
-			if(long_login.equals("8")) {
-				personnel_num = StringUtils.leftPad(String.valueOf(i), 8, '0');
-				name_cashier = StringUtils.rightPad("Luis D'Elía", 20, ' ') + "xxxxxxxxxx";
-			} else {
-				personnel_num = StringUtils.leftPad(String.valueOf(i), 12, '0');
-				name_cashier = StringUtils.rightPad("Luis D'Elía", 20, ' ') + personnel_num.substring(0,4) + "xxxxxx";
-			}
-			
-			CTLLine line = new CTLLine(String.valueOf(i));
-			line.setName(name_cashier);
-			line.setPersonnelNo(personnel_num);
-			line.setProfile("001");
-			line.setLockIndicator("0");
-			line.setWrongEntries("00");
-			
-			uFactory.updateCTLLine(line);
-			
-		}
+		uFactory = new UServiceClientFactory();
 		
-		//Loop to create Supervisors
-		for(int i=802; i<900; i++) {
-			
-			if(long_login.equals("8")) {
-				personnel_num = StringUtils.leftPad(String.valueOf(i), 8, '0');
-				name_cashier = StringUtils.rightPad("José Núñez", 20, ' ') + "xxxxxxxxxx";
-			} else {
-				personnel_num = StringUtils.leftPad(String.valueOf(i), 12, '0');
-				name_cashier = StringUtils.rightPad("José Núñez", 20, ' ') + personnel_num.substring(0,4) + "xxxxxx";
-			}
-			
-			CTLLine line = new CTLLine(String.valueOf(i));
-			line.setName(name_cashier);
-			line.setPersonnelNo(personnel_num);
-			line.setAuthorization("002");
-			line.setProfile("002");
-			line.setLockIndicator("0");
-			line.setWrongEntries("00");
-			
-			uFactory.updateCTLLine(line);
-			
-		}
-	}
-
-	@Test (priority=2)
-	public void emptyCTL() {
-		
-		//Delete all cashiers
+		//Loop to fill the cashier par of CTL
 		for (int i = 3; i < 800; i++) {
 			
-			CTLLine line = new CTLLine(String.valueOf(i));
+			String operator_code = StringUtils.leftPad(String.valueOf(i), 4, "0");;
+			String personnel_number = StringUtils.leftPad(String.valueOf(i), 8, "0");;
+			String name = "";
 			
-			line.setName(StringUtils.leftPad("", 20," ") + "xxxxxxxxxx");
+			if(long_login.equals("8")) {
+				name = StringUtils.rightPad("Luis D'Elía", 20, " ") + "xxxxxxxxxx";
+			} else {
+				name = StringUtils.rightPad("Luis D'Elía", 20, " ") + "0000xxxxxx";
+			}
+			
+			CTLLine line = new CTLLine(operator_code);
+			line.setName(name);
+			line.setPersonnelNo(personnel_number);
+			line.setProfile("001");
+			
+			uFactory.updateCTLLine(line);
+		}
+		
+		//Loop to fill the supervisor par of CTL
+		for (int i = 802; i < 900; i++) {
+			
+			String operator_code = StringUtils.leftPad(String.valueOf(i), 4, "0");;
+			String personnel_number = StringUtils.leftPad(String.valueOf(i), 8, "0");;
+			String name = "";
+			
+			if(long_login.equals("8")) {
+				name = StringUtils.rightPad("José Núñez", 20, " ") + "xxxxxxxxxx";
+			} else {
+				name = StringUtils.rightPad("José Núñez", 20, " ") + "0000xxxxxx";
+			}
+			
+			CTLLine line = new CTLLine(operator_code);
+			line.setName(name);
+			line.setPersonnelNo(personnel_number);
+			line.setProfile("002");
+			
+			uFactory.updateCTLLine(line);
+		}
+	}
+	
+	@Test (priority=2)
+	public void emptyCTL() throws IOException {
+		
+		//Loop to delete cashiers from CTL
+		for (int i = 3; i < 800; i++) {
+			
+			String operator_code = StringUtils.leftPad(String.valueOf(i), 4, "0");
+			
+			CTLLine line = new CTLLine(operator_code);
+			uFactory.updateCTLLine(line);
+		}
+		
+		//Loop to delete supervisors from CTL
+		for (int i = 802; i < 900; i++) {
+			
+			String operator_code = StringUtils.leftPad(String.valueOf(i), 4, "0");
+			
+			CTLLine line = new CTLLine(operator_code);
+			uFactory.updateCTLLine(line);
 		}
 	}
 }
