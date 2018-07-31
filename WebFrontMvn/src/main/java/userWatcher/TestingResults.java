@@ -61,7 +61,7 @@ public class TestingResults {
 				}
 			} else {
 				String name = sh.getCell(3,i).getContents();
-				System.out.println("Nombre: " + name);
+				//System.out.println("Nombre: " + name);
 				int line = Integer.parseInt(sh.getCell(0,i).getContents());
 				//Check which operation is performed over the POS user, in order to determine the verification to be executed
 				if(sh.getCell(5,i).getContents().equals("1")) {
@@ -82,8 +82,8 @@ public class TestingResults {
 		//Verification on CTL File
 		
 		//Checking Name
-		System.out.println("Nombre en CTL: " + factory.getCTLFunction(line).getName());
 		Assert.assertEquals(factory.getCTLFunction(line).getName().substring(0, username.length()), username);
+		System.out.println("Verificado: " + factory.getCTLFunction(line).getName());
 		
 		//Checking Personnel Number
 		if(long_login.equals("12")) {
