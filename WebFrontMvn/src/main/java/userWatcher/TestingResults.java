@@ -53,19 +53,30 @@ public class TestingResults {
 				String name = sh.getCell(1,i).getContents();
 				int line = Integer.parseInt(sh.getCell(0,i).getContents());
 				//Check which operation is performed over the POS user, in order to determine the verification to be executed
-				if(sh.getCell(5,i).getContents().equals("1")) {
+				if(sh.getCell(7,i).getContents().equals("1")) {
 					String login = sh.getCell(2,i).getContents();
 					verificationCreatedUser(name, login, factory, long_login, line);
 				} else {
 					verificationDeletedUser(name, factory, line);
 				}
-			} else {
+			} else if(long_login.equals("8")) {
 				String name = sh.getCell(3,i).getContents();
 				//System.out.println("Nombre: " + name);
 				int line = Integer.parseInt(sh.getCell(0,i).getContents());
 				//Check which operation is performed over the POS user, in order to determine the verification to be executed
-				if(sh.getCell(5,i).getContents().equals("1")) {
+				if(sh.getCell(7,i).getContents().equals("1")) {
 					String login = sh.getCell(4,i).getContents();
+					verificationCreatedUser(name, login, factory, long_login, line);
+				} else {
+					verificationDeletedUser(name, factory, line);
+				}
+			} else {
+				String name = sh.getCell(5,i).getContents();
+				//System.out.println("Nombre: " + name);
+				int line = Integer.parseInt(sh.getCell(0,i).getContents());
+				//Check which operation is performed over the POS user, in order to determine the verification to be executed
+				if(sh.getCell(7,i).getContents().equals("1")) {
+					String login = sh.getCell(6,i).getContents();
 					verificationCreatedUser(name, login, factory, long_login, line);
 				} else {
 					verificationDeletedUser(name, factory, line);
@@ -102,7 +113,13 @@ public class TestingResults {
 		ResultSet rs = stmt.executeQuery(query);
 		rs.next();
 		Assert.assertEquals(username, rs.getString("name").substring(0, username.length()));
-		String login_for_DB = StringUtils.leftPad(rs.getString("personnel_number"),Integer.parseInt(long_login),'0');
+		String login_for_DB = "";
+		if(long_login.equals("4")) {
+			login_for_DB = StringUtils.leftPad(rs.getString("personnel_number"),(Integer.parseInt(long_login))+4,'0');
+		} else {
+			login_for_DB = StringUtils.leftPad(rs.getString("personnel_number"),Integer.parseInt(long_login),'0');
+		}
+		
 		Assert.assertEquals(login_for_DB,login);
 		
 		//Verification on CTL that there is no displacement of the register
