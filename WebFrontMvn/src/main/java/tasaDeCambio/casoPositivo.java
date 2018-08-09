@@ -33,7 +33,7 @@ public class casoPositivo {
 		ChromeOptions op = new ChromeOptions();
 		op.addArguments("--start-maximized");
 		driver = new ChromeDriver(op);
-		wait = new WebDriverWait(driver, 15);
+		wait = new WebDriverWait(driver, 40);
 		
 		//Getting parameters
 		fl = new File("Parametros\\TasaDeCambio\\Parametros.xls");
@@ -51,16 +51,16 @@ public class casoPositivo {
 		String functionality = sh.getCell(4, 6).getContents();
 		String menuBehaviour = sh.getCell(5, 6).getContents();
 		
-		//UsefulMethodsWF.createWFTestUser(adminUser, adminPass, testUser, testPass, role, functionality, menuBehaviour, driver);
+		UsefulMethodsWF.createWFTestUser(adminUser, adminPass, testUser, testPass, role, functionality, menuBehaviour, driver);
 		UsefulMethodsWF.loginWF(driver, testUser, testPass);
 		
 		//Navigates to Tasa de Cambio 
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='verticalmenu z-div']"))).click();
 		wait.until(ExpectedConditions.elementToBeClickable(driver.findElements(By.xpath("//*[@class='z-toolbarbutton-cnt']")).get(4))).click();
 		
-		
+		//Loop to modify the exchange rates
 		for (int i = 9; i < sh.getRows(); i++) {
-			//Clic on Modificar of Dollar exchange rate
+			//Clic on Modificar of exchange rate
 			wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.className("z-button-cm"))).get(i-9).click();
 			wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.className("z-textbox"))).get(0).clear();
 			
@@ -79,24 +79,41 @@ public class casoPositivo {
 		//Go to home page 
 		driver.findElement(By.xpath("//a[@title='Volver a la Página Principal']")).click();
 		
-		//Go again to Tasa de Cambio
-		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='verticalmenu z-div']"))).click();
-		wait.until(ExpectedConditions.elementToBeClickable(driver.findElements(By.xpath("//*[@class='z-toolbarbutton-cnt']")).get(4))).click();
-
+		//Interlock
+		if (wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='z-label' and text()='Bienvenido a WebFront']"))).isDisplayed()) {
+			
+			//Go again to Tasa de Cambio
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='verticalmenu z-div']"))).click();
+			wait.until(ExpectedConditions.elementToBeClickable(driver.findElements(By.xpath("//*[@class='z-toolbarbutton-cnt']")).get(4))).click();
+			//wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//*[@class='z-groupbox-3d-cnt']//*[@class='z-toolbarbutton-cnt']"))).get(4).click();
+			
+		};
+	
+		//Loop to verify the succesful modification of the exchange rates
 		for (int i = 9; i < sh.getRows(); i++) {
-			//Clic on Modificar of Dollar exchange rate
+			//Clic on Modificar of exchange rate
 			wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.className("z-button-cm"))).get(i-9).click();
 			
 			//Get rate displayed
-			String rate = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.className("z-textbox"))).get(0).getAttribute("value");
+			String rate = "";
+			rate = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.className("z-textbox"))).get(0).getAttribute("value");
+			
+			//Clic on Cancelar
+			driver.findElement(By.xpath("//*[@class='z-button-cm' and text()=' Cancelar']")).click();
 			
 			//Verification
 			Assert.assertEquals(rate, sh.getCell(1, i).getContents());
 			
-			//Clic on Cancelar
-			driver.findElement(By.xpath("//*[@class='z-button-cm' and text()=' Cancelar']")).click();
+			//Go to home page 
+			driver.findElement(By.xpath("//a[@title='Volver a la Página Principal']")).click();
+			
+			//Go again to Tasa de Cambio
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='verticalmenu z-div']"))).click();
+			wait.until(ExpectedConditions.elementToBeClickable(driver.findElements(By.xpath("//*[@class='z-toolbarbutton-cnt']")).get(4))).click();
+
 		}
 		
 		UsefulMethodsWF.logoutWF(driver);
+		UsefulMethodsWF.deleteWFTestUser(adminUser, adminPass, testUser, driver);
 	}
 }
