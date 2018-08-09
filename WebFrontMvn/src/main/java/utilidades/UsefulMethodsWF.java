@@ -24,7 +24,7 @@ public class UsefulMethodsWF {
 		
 		WebDriverWait wait = new WebDriverWait(driver, 20);
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@title='Introduzca el Nombre de Usuario']"))).sendKeys(user);
-		driver.findElement(By.xpath("//*[@class='textlogin z-textbox' and @title='Tipee la Contraseña del Usuario']")).sendKeys(pass);
+		driver.findElement(By.xpath("//*[@class='textlogin z-textbox' and @title='Introduzca la Contraseña del Usuario']")).sendKeys(pass);
 		driver.findElement(By.xpath("//*[@class='z-button-cm' and text()=' Confirmar']")).click();
 	}
 	
