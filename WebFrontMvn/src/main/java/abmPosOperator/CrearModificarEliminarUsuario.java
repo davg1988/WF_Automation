@@ -41,7 +41,7 @@ public class CrearModificarEliminarUsuario {
 	String long_login = "";
 	RServiceClientFactory factory;
 	
-	@Test (priority=1)
+	@Test (priority=1, groups = {"FullAutomated"})
 	public void launchWF() throws BiffException, IOException {
 		
 		fl = new File("Parametros\\AbmOperadoresPos\\Parametros.xls");
@@ -81,9 +81,10 @@ public class CrearModificarEliminarUsuario {
 		wait.until(ExpectedConditions.elementToBeClickable(driver.findElements(By.xpath("//*[@class='z-toolbarbutton-cnt']")).get(0))).click();
 	}
 	
-	@Test (priority=6)
+	@Test (priority=6, groups = {"FullAutomated"})
 	public void insertNewUser() throws Exception {
 		
+		System.out.println("till the row number: "+ sh.getRows());
 		for (int i = 11; i < sh.getRows(); i++) {
 			
 			// Obtain Parameters From Excel File
@@ -105,9 +106,10 @@ public class CrearModificarEliminarUsuario {
 		}		
 	}
 	
-	@Test (priority=7)
+	@Test (priority=7, groups = {"FullAutomated"})
 	public void modifyUser() throws Exception {
 		
+		//variable that indicates the index of the register that is going to be checked
 		int count = 1;
 		for (int i = 11; i < sh.getRows(); i++) {
 			
@@ -126,11 +128,16 @@ public class CrearModificarEliminarUsuario {
 			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@class='z-window-highlighted-cnt']//*[@class='z-messagebox-btn z-button-os']"))).click();
 			
 			int register = registers.get(count-1);
+			
+			//Verification of the modification on WF, on the DB and on the CTL
 			verificationCreatedUser(modified_name, modified_login, factory, driver, long_login, register);
+			
+			//increase the index to check the next register
+			count++;
 		}		
 	}
 	
-	@Test (priority=8)
+	@Test (priority=8, groups = {"FullAutomated"})
 	public void deleteUser() throws Exception {
 		
 		int count = 1;
@@ -145,7 +152,7 @@ public class CrearModificarEliminarUsuario {
 		UsefulMethodsWF.logoutWF(driver);
 	}
 	
-	@Test (priority=9)
+	@Test (priority=9, groups = {"FullAutomated"})
 	public void deleteTestUser() {
 		
 		//Login as an admin
@@ -219,11 +226,14 @@ public class CrearModificarEliminarUsuario {
 	
 	public static void verificationCreatedUser(String username, String login, RServiceClientFactory factory, WebDriver driver, String long_login, int line) throws SQLException, IOException {
 		
+		System.out.println("Line to verify: "+ line);
+		
 		//Verification on WF
-		//Assert.assertEquals(true, driver.findElement(By.xpath("//*[@class='z-listcell-cnt z-overflow-hidden' and text()='"+username+"']")).isDisplayed());
 		Assert.assertEquals(true, driver.findElement(By.xpath("//*[@class='z-listcell-cnt z-overflow-hidden' and text()=\""+username+"\"]")).isDisplayed());
 		
 		//Verification on CTL File
+		System.out.println("Name on CTL: "+factory.getCTLFunction(line).getName().substring(0, username.length()));
+		System.out.println("Name on Excel: "+ username);
 		Assert.assertEquals(factory.getCTLFunction(line).getName().substring(0, username.length()), username);
 		Assert.assertEquals(factory.getCTLFunction(line).getPersonnelNo(), StringUtils.leftPad(login, Integer.parseInt(long_login), '0'));
 		
