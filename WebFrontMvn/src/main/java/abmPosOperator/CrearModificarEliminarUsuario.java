@@ -153,7 +153,7 @@ public class CrearModificarEliminarUsuario {
 	}
 	
 	@Test (priority=9, groups = {"FullAutomated"})
-	public void deleteTestUser() {
+	public void closeWF() {
 		
 		//Login as an admin
 		String user, pass;
