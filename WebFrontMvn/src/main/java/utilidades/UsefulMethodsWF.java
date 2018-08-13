@@ -1,13 +1,21 @@
 package utilidades;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import jxl.Sheet;
+import jxl.Workbook;
+import jxl.read.biff.BiffException;
 
 public class UsefulMethodsWF {
 
@@ -87,5 +95,39 @@ public class UsefulMethodsWF {
 		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@class='z-window-highlighted-cnt']//*[@class='z-messagebox-btn z-button-os' and text()='Yes']"))).click();
 		UsefulMethodsWF.logoutWF(driver);
 		driver.close();
+	}
+
+	public static WebDriver setUpWf() throws BiffException, IOException {
+		
+		//Getting parameters of the test environment
+		File fl = new File("Parametros\\EnvironmentParameters.xls");
+		Workbook wb = Workbook.getWorkbook(fl);
+		Sheet sh = wb.getSheet("Environment");
+		
+		//Setting launch of the browser
+		System.setProperty("webdriver.chrome.driver", "ChromeDriver\\chromedriver.exe");
+		ChromeOptions op = new ChromeOptions();
+		op.addArguments("--start-maximized");
+		WebDriver driver = new ChromeDriver(op);
+		String url = sh.getCell(1,3).getContents();
+		driver.get(url);
+		
+		//Setting the IP for the clients of Rest Service
+		Environment.setEnv_ip(url);
+		
+		return driver;
+	}
+
+	public static String getLongLogin() throws BiffException, IOException {
+		
+		//Getting parameters of the test environment
+		File fl = new File("Parametros\\EnvironmentParameters.xls");
+		Workbook wb = Workbook.getWorkbook(fl);
+		Sheet sh = wb.getSheet("Environment");
+		
+		//Getting the long of the personnel number configured in UserWatcher.properties
+		String long_login = sh.getCell(1, 4).getContents();
+		
+		return long_login;
 	}
 }
