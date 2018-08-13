@@ -13,8 +13,6 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -44,25 +42,18 @@ public class CrearModificarEliminarUsuario {
 	@Test (priority=1, groups = {"FullAutomated"})
 	public void launchWF() throws BiffException, IOException {
 		
+		// Configuring driver
+		driver = UsefulMethodsWF.setUpWf();
+		wait = new WebDriverWait(driver,60);
+		long_login = UsefulMethodsWF.getLongLogin();
+		factory = new RServiceClientFactory();
+		
+		// Configure objects for data provider
 		fl = new File("Parametros\\AbmOperadoresPos\\Parametros.xls");
 		wb = Workbook.getWorkbook(fl);
 		sh = wb.getSheet("CrearEliminarModificar");
-		long_login = sh.getCell(1,8).getContents();
 		
-		//Setting launch of the browser
-		System.setProperty("webdriver.chrome.driver", "ChromeDriver\\chromedriver.exe");
-		ChromeOptions op = new ChromeOptions();
-		op.addArguments("--start-maximized");
-		driver = new ChromeDriver(op);
-		wait = new WebDriverWait(driver,60);
-		String url = sh.getCell(1,2).getContents();
-		driver.get(url);
-		
-		//Setting the IP for the clients of Rest Service
-		Environment.setEnv_ip(url);
-		factory = new RServiceClientFactory();
-		
-		//Getting parameters from excel file
+		// Getting parameters from excel file
 		String adminUser = sh.getCell(1,5).getContents();
 		String adminPass = sh.getCell(2,5).getContents();
 		String user = sh.getCell(1,6).getContents();
@@ -71,6 +62,7 @@ public class CrearModificarEliminarUsuario {
 		String functionality = sh.getCell(4,6).getContents();
 		String menuBehaviour = sh.getCell(5,6).getContents();
 		
+		// Create WebFront user for execute the test
 		UsefulMethodsWF.createWFTestUser(adminUser, adminPass, user, pass, role, functionality, menuBehaviour, driver);
 		
 		// Login as a user
@@ -84,7 +76,6 @@ public class CrearModificarEliminarUsuario {
 	@Test (priority=6, groups = {"FullAutomated"})
 	public void insertNewUser() throws Exception {
 		
-		System.out.println("till the row number: "+ sh.getRows());
 		for (int i = 11; i < sh.getRows(); i++) {
 			
 			// Obtain Parameters From Excel File
@@ -167,36 +158,36 @@ public class CrearModificarEliminarUsuario {
 	//********************* Methods **********************
 	
 	public static void deletePosOperator (WebDriver driver, String name) {
-		WebDriverWait wait = new WebDriverWait(driver, 60);
-		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='z-listcell-cnt z-overflow-hidden' and text()='"+name+"']"))).click();
+		WebDriverWait wait = new WebDriverWait(driver, 40);
+		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='z-listcell-cnt z-overflow-hidden' and text()=\""+name+"\"]"))).click();
 		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@class='z-button-cm'and text()=' Baja']"))).click();
 		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@class='z-messagebox-btn z-button-os' and text()='Yes']"))).click();
 		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@class='z-window-highlighted-cnt']//*[@class='z-messagebox-btn z-button-os' and text()='OK']"))).click();
 	}
 	
 	public static void createPosOperator (WebDriver driver, String role, String name, String login) {
-		WebDriverWait wait = new WebDriverWait(driver, 60);
+		WebDriverWait wait = new WebDriverWait(driver, 40);
 		
-		//Click on Insertar button
+		// Click on Insertar button
 		wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(By.className("z-button-cm"), 2));
 		driver.findElements(By.className("z-button-cm")).get(1).click();
 		
-		//Selecting the role of the operator
+		// Selecting the role of the operator
 		wait.until(ExpectedConditions.numberOfElementsToBe(By.xpath("//select[@class='z-selectbox']"), 2));
 		Select select = new Select(wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//select[@class='z-selectbox' and not (@disabled='disabled')]"))));
 		select.selectByVisibleText(role);
 		
-		//Filling the name field
+		// Filling the name field
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='z-textbox' and @maxlength='20']"))).sendKeys(name);
 		
-		//Filling the login field
+		// Filling the login field
 		driver.findElement(By.xpath("//*[@class='z-longbox']")).clear();
 		driver.findElement(By.xpath("//*[@class='z-longbox z-longbox-focus']")).sendKeys(login);
 		
-		//Click on Confirmar button
+		// Click on Confirmar button
 		driver.findElement(By.xpath("//*[@class='z-button-cm' and text()=' Confirmar']")).click();
 		
-		//Click on OK
+		// Click on OK
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='z-messagebox-window z-window-highlighted z-window-highlighted-shadow']//*[@class='z-messagebox-btn z-button-os']"))).click();
 	}
 	
@@ -228,19 +219,19 @@ public class CrearModificarEliminarUsuario {
 		
 		System.out.println("Line to verify: "+ line);
 		
-		//Verification on WF
+		// Verification on WF
 		Assert.assertEquals(true, driver.findElement(By.xpath("//*[@class='z-listcell-cnt z-overflow-hidden' and text()=\""+username+"\"]")).isDisplayed());
 		
-		//Verification on CTL File
+		// Verification on CTL File
 		System.out.println("Name on CTL: "+factory.getCTLFunction(line).getName().substring(0, username.length()));
 		System.out.println("Name on Excel: "+ username);
 		Assert.assertEquals(factory.getCTLFunction(line).getName().substring(0, username.length()), username);
 		Assert.assertEquals(factory.getCTLFunction(line).getPersonnelNo(), StringUtils.leftPad(login, Integer.parseInt(long_login), '0'));
 		
-		//Verification on DB (checker table)
+		// Verification on DB (checker table)
 		String query = "SELECT name, personnel_number FROM mtxadmin.checker WHERE checker_number = "+ line +"";
 		
-		//Connection to the DB
+		// Connection to the DB
 		Connection db = DriverManager.getConnection("jdbc:postgresql://"+Environment.getEnv_ip()+":5432/webfront", "postgres", "ARS4ever");
 		Statement stmt = db.createStatement();
 		ResultSet rs = stmt.executeQuery(query);
@@ -248,7 +239,7 @@ public class CrearModificarEliminarUsuario {
 		Assert.assertEquals(username, rs.getString("name").substring(0, username.length()));
 		Assert.assertEquals(rs.getString("personnel_number"),login);
 		
-		//Verification on CTL that there is no displacement of the register
+		// Verification on CTL that there is no displacement of the register
 		if (long_login.equals("12")) {
 			Assert.assertEquals("xxxxxx", factory.getCTLFunction(line).getName().substring(24, 30));
 		} else {
@@ -258,16 +249,16 @@ public class CrearModificarEliminarUsuario {
 
 	public static void verificationDeletedUser (String name, RServiceClientFactory factory, WebDriver driver, int line) throws IOException, SQLException {
 		
-		//Verify that does not appear in WF
+		// Verify that does not appear in WF
 		Assert.assertEquals(true, driver.findElements(By.xpath("//*[@class='z-listcell-cnt z-overflow-hidden' and text()='"+name+"']")).size()==0);
 		
-		//Verify that does not appear in CTL file
+		// Verify that does not appear in CTL file
 		Assert.assertEquals(factory.getCTLFunction(line).getName(),"xxxxxxxxxx");
 		Assert.assertEquals(factory.getCTLFunction(line).getLockIndicator(), "1");
 		Assert.assertEquals(factory.getCTLFunction(line).getPassword(), "000000000000000000000000");
 		Assert.assertEquals(factory.getCTLFunction(line).getWrongEntries(), "00");
 		
-		//Verify that does not appear in the DB
+		// Verify that does not appear in the DB
 		String query = "SELECT name,personnel_number FROM mtxadmin.checker WHERE checker_number = "+ line +"";
 		Connection db = DriverManager.getConnection("jdbc:postgresql://"+Environment.getEnv_ip()+":5432/webfront", "postgres", "ARS4ever");
 		Statement stmt = db.createStatement();

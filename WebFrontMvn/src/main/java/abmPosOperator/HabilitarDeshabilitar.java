@@ -7,11 +7,7 @@ import java.util.List;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -19,8 +15,6 @@ import org.testng.annotations.Test;
 import jxl.Sheet;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
-import utilidades.Environment;
-import utilidades.ScreenShot;
 import utilidades.UsefulMethodsWF;
 import webFrontCommonUtils.RServiceClientFactory;
 
@@ -41,81 +35,49 @@ public class HabilitarDeshabilitar {
 	@Test (priority=1)
 	public void launchWFAndSetParameters () throws BiffException, IOException {
 		
+		//Setting the driver
+		driver = UsefulMethodsWF.setUpWf();
+		wait = new WebDriverWait(driver,40);
+		
+		//Getting the long of the personnel number configured in UserWatcher.properties
+		long_login = UsefulMethodsWF.getLongLogin();
+		
+		//Instance of RServiceClientFactory
+		factory = new RServiceClientFactory();
+		
 		//Getting parameters to launch browser
 		fl = new File("Parametros\\AbmOperadoresPos\\Parametros.xls");
 		wb = Workbook.getWorkbook(fl);
 		sh = wb.getSheet("HabilitarDeshabilitar");
-		String url = sh.getCell(1,2).getContents();
-		
-		//Configure and launch Web Browser
-		System.setProperty("webdriver.chrome.driver", "ChromeDriver\\chromedriver.exe");
-		ChromeOptions op = new ChromeOptions();
-		op.addArguments("--start-maximized");
-		driver = new ChromeDriver(op);
-		wait = new WebDriverWait(driver,20);
-		driver.get(url);
-		
-		//Setting IP for rest service
-		Environment.setEnv_ip(url);
-		factory = new RServiceClientFactory();
-	}
-	
-	@Test (priority=3)
-	public void createTestUser () {
 		
 		//Getting admin credentials from excel file
 		String adminUser = sh.getCell(1,5).getContents();
 		String adminPass = sh.getCell(2,5).getContents();
 		
-		UsefulMethodsWF.loginWF(driver, adminUser, adminPass);
-		
-		//Click on Gestion Login
-		wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(By.xpath("//*[@class='z-toolbarbutton-cnt']"),1)).get(1).click();
-		
-		//Click on Insertar button
-		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//td[@class='z-button-cm' and text()=' Insertar']"))).click();
-		
 		//Getting data of WebFront User to create for the execution of test
-		String user, pass, role, functionality, menuBehaviour;
-		user = sh.getCell(1,6).getContents();
-		pass = sh.getCell(2,6).getContents();
-		role = sh.getCell(3,6).getContents();
-		functionality = sh.getCell(4,6).getContents();
-		menuBehaviour = sh.getCell(5,6).getContents();
+		String user = sh.getCell(1,6).getContents();
+		String pass = sh.getCell(2,6).getContents();
+		String role = sh.getCell(3,6).getContents();
+		String functionality = sh.getCell(4,6).getContents();
+		String menuBehaviour = sh.getCell(5,6).getContents();
 
-		List<WebElement> txtFields = wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(By.xpath("//*[@class='z-textbox']"), 2));
-		txtFields.get(1).sendKeys(user);
-		txtFields.get(2).sendKeys(pass);
-		Select roleList = new Select(driver.findElements(By.xpath("//*[@class='z-selectbox']")).get(0));
-		roleList.selectByVisibleText(role);
-		Select functionalityList = new Select(driver.findElements(By.xpath("//*[@class='z-selectbox']")).get(1));
-		functionalityList.selectByVisibleText(functionality);
-		Select selectMenuBehaviour = new Select(driver.findElements(By.xpath("//*[@class='z-selectbox']")).get(2));
-		selectMenuBehaviour.selectByVisibleText(menuBehaviour);
-		driver.findElement(By.xpath("//*[@class='z-button-cm' and text()=' Confirmar']")).click();
-		
-		//Logout
-		UsefulMethodsWF.logoutWF(driver);
+		//Create WF test user
+		UsefulMethodsWF.createWFTestUser(adminUser, adminPass, user, pass, role, functionality, menuBehaviour, driver);	
 	}
 
-	@Test (priority=5)
-	public void goToMantenimientoUsuarios() {
+	@Test (priority = 9)
+	public void disablePosOperator() throws Exception {
 		
-		// Login as a user
-		String user, pass;
-		user = sh.getCell(1,6).getContents();
-		pass = sh.getCell(2,6).getContents();
+		//Login to WF and go to Mantenimiento de Usuarios
+		String user = sh.getCell(1,6).getContents();
+		String pass = sh.getCell(2,6).getContents();
 		UsefulMethodsWF.loginWF(driver, user, pass);
-		
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='verticalmenu z-div']"))).click();
 		wait.until(ExpectedConditions.elementToBeClickable(driver.findElements(By.xpath("//*[@class='z-toolbarbutton-cnt']")).get(0))).click();
-	}
-
-	@Test (priority=7)
-	public void insertNewUser() throws Exception {
 		
 		long_login = sh.getCell(1,8).getContents();
 		
+		//Loop to create the pos operators to disable
 		for (int i = 12; i < sh.getRows(); i++) {
 			
 			// Obtain Parameters From Excel File
@@ -131,19 +93,14 @@ public class HabilitarDeshabilitar {
 			
 			//Insertion of new user
 			CrearModificarEliminarUsuario.createPosOperator(driver, role, username, login);
-		}		
-	}
-
-	@Test (priority = 9)
-	public void disablePosOperator() throws Exception {
+		}
 		
 		int cont_icons = 2;
 		int cont_registers = 0;
 		
 		for(int i = 12; i < sh.getRows(); i++) {
-			String name = sh.getCell(2,i).getContents();
+			String name = sh.getCell(1,i).getContents();
 			disableOperator(driver, name);
-			ScreenShot.takeSnapShot(driver, "Evidencia\\AbmPosOperator\\HabilitarDeshabilitar\\deshabilitar"+(i-11)+".png");
 			
 			//Verification of lock field, must change to 1
 			Assert.assertEquals(factory.getCTLFunction(registers.get(cont_registers)).getLockIndicator(), "1");
@@ -162,13 +119,13 @@ public class HabilitarDeshabilitar {
 		int cont_icons = 2;
 		int cont_registers = 0;
 		
+		//Loops to enable the pos operators
 		for(int i = 12; i < sh.getRows(); i++) {
-			String name = sh.getCell(2,i).getContents();
+			String name = sh.getCell(1,i).getContents();
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='z-listcell-cnt z-overflow-hidden' and text()=\""+name+"\"]"))).click();
 			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@class='z-button-cm'and text()=' Habilitar']"))).click();
 			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@class='z-messagebox-btn z-button-os' and text()='Yes']"))).click();
 			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@class='z-window-highlighted-cnt']//*[@class='z-messagebox-btn z-button-os' and text()='OK']"))).click();
-			ScreenShot.takeSnapShot(driver, "Evidencia\\AbmPosOperator\\HabilitarDeshabilitar\\habilitar"+(i-11)+".png");
 			
 			//Verification of lock field, must change to 1
 			Assert.assertEquals(factory.getCTLFunction(registers.get(cont_registers)).getLockIndicator(), "0");
@@ -179,54 +136,26 @@ public class HabilitarDeshabilitar {
 			cont_icons++;
 			cont_registers++;
 		}
-	}
-	
-	@Test (priority=13)
-	public void deleteUser() throws Exception {
 		
+		//Loop to delete the pos operators used during the test
 		for (int i = 12; i < sh.getRows(); i++) {
-			String name = sh.getCell(2,i).getContents();
+			String name = sh.getCell(1,i).getContents();
 			CrearModificarEliminarUsuario.deletePosOperator(driver, name);
 		}
 		UsefulMethodsWF.logoutWF(driver);
 	}
 	
 	@Test (priority=15)
-	public void deleteTestUser() {
+	public void closeWF() {
 		
 		//Login as an admin
 		String user, pass;
 		user = sh.getCell(1,5).getContents();
 		pass = sh.getCell(2,5).getContents();
-		UsefulMethodsWF.loginWF(driver, user, pass);
-		
-		//Go To Gestion Login
-		wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//*[@class='z-window-embedded']//*[@class='z-toolbarbutton-cnt']"))).get(1).click();
-		driver.findElement(By.xpath("//*[@class='titlebar nomargin_left z-hbox']")).click();
-		
-		//Find test user
-		List<WebElement> white_rows = driver.findElements(By.xpath("//*[@class='z-row']//*[@class='z-listcell-cnt z-overflow-hidden']"));
-		List<WebElement> gray_rows = driver.findElements(By.xpath("//*[@class='z-row z-grid-odd']//*[@class='z-listcell-cnt z-overflow-hidden']"));
+		//Name of the WF user used to do the test
 		String name = sh.getCell(1,5).getContents();
-		int located_index = 0;
-		int i = 0;
-		while(i<white_rows.size()) {
-			if(white_rows.get(i).getText().equals(name)) {
-				located_index = i*2;
-				i = white_rows.size();
-			}				
-		}
-		int j = 0;
-		while(j<gray_rows.size()) {
-			if(gray_rows.get(i).getText().equals(name)) {
-				located_index = j+j+1;
-				j = gray_rows.size();
-			}
-		}
-		wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//*[@class='z-button-cm' and text()=' Eliminar']"))).get(located_index).click();
-		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@class='z-window-highlighted-cnt']//*[@class='z-messagebox-btn z-button-os' and text()='Yes']"))).click();
-		UsefulMethodsWF.logoutWF(driver);
-		driver.close();
+		
+		UsefulMethodsWF.deleteWFTestUser(user, pass, name, driver);
 	}
 	
 	// **************************** METHODS USED IN THE CLASS *************************************
