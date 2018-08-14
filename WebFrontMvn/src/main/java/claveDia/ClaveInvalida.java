@@ -5,8 +5,6 @@ import java.io.IOException;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
@@ -28,53 +26,31 @@ public class ClaveInvalida {
 	@Test (priority= 1, groups= {"FullAutomated"})
 	public void launchWF() throws BiffException, IOException {
 
-		//Setting browser configurations
-		System.setProperty("webdriver.chrome.driver", "ChromeDriver\\chromedriver.exe");
-		ChromeOptions op = new ChromeOptions();
-		op.addArguments("--start-maximized");
-		driver = new ChromeDriver(op);
+		driver = UsefulMethodsWF.setUpWf();
 		wait = new WebDriverWait(driver, 40);
-		
-		//Setting data provider
-		fl = new File("Parametros\\ClaveDia\\Parametros.xls");
-		wb = Workbook.getWorkbook(fl);
-		sh = wb.getSheet("ClaveInvalida");
-		
-		//Getting url from Excel file
-		String url = sh.getCell(1, 2).getContents();
-		driver.get(url);
 
-		//Getting parameters from Excel file
-		String adminUser = sh.getCell(1,5).getContents();
-		String adminPass = sh.getCell(2,5).getContents();
-		String user = sh.getCell(1,6).getContents();
-		String pass = sh.getCell(2,6).getContents();
-		String role = sh.getCell(3,6).getContents();
-		String functionality = sh.getCell(4,6).getContents();
-		String menuBehaviour = sh.getCell(5,6).getContents();
-
-		UsefulMethodsWF.createWFTestUser(adminUser, adminPass, user, pass, role, functionality, menuBehaviour, driver);
+		UsefulMethodsWF.createWFTestUser(driver);
 	}
 
 	@Test (priority= 2, groups= {"FullAutomated"})
-	public void insertInvalidKey() {
-
-		//Getting parameters to login
-		String user = sh.getCell(1,6).getContents();
-		String pass = sh.getCell(2,6).getContents();
-
-		// Login as a user
-		UsefulMethodsWF.loginWF(driver, user, pass);
-
+	public void insertInvalidKey() throws BiffException, IOException {
+		
+		// Login with webfront test user
+		UsefulMethodsWF.loginWFTestUser(driver);
+		
 		// Go to Clave Día
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='verticalmenu z-div']"))).click();
 		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@class='z-window-embedded-cnt-noborder']"
 				+ "//*[@class='z-groupbox-3d-header']//*[@class='z-caption-l' and text()='Fin de Día']"))).click();
 		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("(//*[@class='z-toolbarbutton-cnt'])[12]"))).click();
 		
+		//Setting data provider
+		fl = new File("Parametros\\ClaveDia\\Parametros.xls");
+		wb = Workbook.getWorkbook(fl);
+		sh = wb.getSheet("ClaveInvalida");
+		
 		//Insert invalid input
 		for (int j = 9; j < sh.getRows(); j++) {
-			System.out.println("Loop "+j);
 			String invalid_input = sh.getCell(1, j).getContents();
 			if (j==9) {
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='z-textbox']"))).clear();
@@ -93,13 +69,8 @@ public class ClaveInvalida {
 	}
 	
 	@Test (priority= 3, groups= {"FullAutomated"})
-	public void closeWF() {
+	public void closeWF() throws BiffException, IOException {
 		
-		//Getting parameters from Excel file
-		String adminUser = sh.getCell(1,5).getContents();
-		String adminPass = sh.getCell(2,5).getContents();
-		String user = sh.getCell(1,6).getContents();
-		
-		UsefulMethodsWF.deleteWFTestUser(adminUser, adminPass, user, driver);
+		UsefulMethodsWF.deleteWFTestUser(driver);
 	}
 }
