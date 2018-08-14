@@ -171,4 +171,16 @@ public class UsefulMethodsWF {
 		
 		return long_login;
 	}
+
+	public static void loginAdmin(WebDriver driver) throws BiffException, IOException {
+		
+		// Getting parameters from excel file
+		File fl = new File("Parametros\\\\EnvironmentParameters.xls");
+		Workbook wb = Workbook.getWorkbook(fl);
+		Sheet sh = wb.getSheet("Environment");
+	
+		String adminUser = sh.getCell(1, 6).getContents();
+		String adminPass = sh.getCell(1, 7).getContents();
+		UsefulMethodsWF.loginWF(driver, adminUser, adminPass);
+	}
 }
