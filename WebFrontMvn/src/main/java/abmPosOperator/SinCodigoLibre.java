@@ -6,8 +6,6 @@ import java.io.IOException;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -17,7 +15,6 @@ import junit.framework.Assert;
 import jxl.Sheet;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
-import utilidades.Environment;
 import utilidades.UsefulMethodsWF;
 import webFrontCommonUtils.CTLLine;
 import webFrontCommonUtils.UServiceClientFactory;
@@ -36,22 +33,25 @@ public class SinCodigoLibre {
 	
 	UServiceClientFactory uFactory;
 	
-	@Test (priority=1)
+	@Test (priority=1, groups = {"FullAutomated"})
 	public void fillCTL() throws BiffException, IOException {
 		
+		// Setting objects to get parameters from excel sheet
 		fl = new File("Parametros\\AbmOperadoresPos\\Parametros.xls");
 		wb = Workbook.getWorkbook(fl);
 		sh = wb.getSheet("SinCodigoLibre");
 		
-		url = sh.getCell(1, 2).getContents();
-		Environment.setEnv_ip(url);
+		// Setting driver
+		driver = UsefulMethodsWF.setUpWf();
+		wait = new WebDriverWait(driver, 40);
 		
-		String long_login = sh.getCell(1, 8).getContents();
+		// Getting long of the personnel number
+		String long_login = UsefulMethodsWF.getLongLogin();
 		
 		uFactory = new UServiceClientFactory();
 		
-		//Loop to fill the cashier par of CTL
-		for (int i = 3; i < 800; i++) {
+		// Loop to fill the cashier par of CTL
+		for (int i = 1; i < 800; i++) {
 			
 			String operator_code = StringUtils.leftPad(String.valueOf(i), 4, "0");;
 			String personnel_number = StringUtils.leftPad(String.valueOf(i), 8, "0");;
@@ -71,8 +71,8 @@ public class SinCodigoLibre {
 			uFactory.updateCTLLine(line);
 		}
 		
-		//Loop to fill the supervisor par of CTL
-		for (int i = 802; i < 900; i++) {
+		// Loop to fill the supervisor par of CTL
+		for (int i = 801; i < 900; i++) {
 			
 			String operator_code = StringUtils.leftPad(String.valueOf(i), 4, "0");;
 			String personnel_number = StringUtils.leftPad(String.valueOf(i), 8, "0");;
@@ -92,20 +92,9 @@ public class SinCodigoLibre {
 			uFactory.updateCTLLine(line);
 		}
 	}
-	
-	@Test (priority=2)
-	public void launchBrowser() {
-		
-		System.setProperty("webdriver.chrome.driver", "ChromeDriver\\chromedriver.exe");
-		ChromeOptions op = new ChromeOptions();
-		op.addArguments("--start-maximized");
-		driver = new ChromeDriver(op);
-		wait = new WebDriverWait(driver, 20);
-		driver.get(url);
-	}
 
-	@Test (priority=3)
-	public void createWFUser() {
+	@Test (priority=2, groups = {"FullAutomated"})
+	public void createCashierSupervisor() throws IOException {
 		
 		//Parameters of admin user
 		String adminUser = sh.getCell(1, 5).getContents();
@@ -119,17 +108,11 @@ public class SinCodigoLibre {
 		String menuBehaviour = sh.getCell(5, 6).getContents();
 		
 		UsefulMethodsWF.createWFTestUser(adminUser, adminPass, testUser, testPass, role, functionality, menuBehaviour, driver);
-	}
-
-	@Test (priority=4)
-	public void createCashier() {
 		
 		// Login as a user
-		String user, pass;
-		user = sh.getCell(1,6).getContents();
-		pass = sh.getCell(2,6).getContents();
-		UsefulMethodsWF.loginWF(driver, user, pass);
+		UsefulMethodsWF.loginWF(driver, testUser, testPass);
 		
+		// Navigate to Mantenimiento de Usuarios
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='verticalmenu z-div']"))).click();
 		wait.until(ExpectedConditions.elementToBeClickable(driver.findElements(By.xpath("//*[@class='z-toolbarbutton-cnt']")).get(0))).click();
 		
@@ -137,10 +120,22 @@ public class SinCodigoLibre {
 		wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(By.className("z-button-cm"), 2));
 		driver.findElements(By.className("z-button-cm")).get(1).click();
 		
-		//Selecting the role of the operator
+		//Selecting the cashier role
 		wait.until(ExpectedConditions.numberOfElementsToBe(By.xpath("//select[@class='z-selectbox']"), 2));
 		Select select = new Select(wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//select[@class='z-selectbox' and not (@disabled='disabled')]"))));
 		select.selectByVisibleText("Cajero");
+		
+		//Check if the error message is displayed
+		Assert.assertEquals(true, wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='z-messagebox-window z-window-highlighted z-window-highlighted-shadow']//span[@class='z-label' and text()='No hay códigos libres']"))).isDisplayed());
+		
+		//Click on OK
+		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
+				"//*[@class='z-messagebox-window z-window-highlighted z-window-highlighted-shadow']//*[@class='z-messagebox-btn z-button-os']"))).click();
+		
+		//Selecting the supervisor role
+		wait.until(ExpectedConditions.numberOfElementsToBe(By.xpath("//select[@class='z-selectbox']"), 2));
+		Select select2 = new Select(wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//select[@class='z-selectbox' and not (@disabled='disabled')]"))));
+		select2.selectByVisibleText("Supervisor");
 		
 		//Check if the error message is displayed
 		Assert.assertEquals(true, wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='z-messagebox-window z-window-highlighted z-window-highlighted-shadow']//span[@class='z-label' and text()='No hay códigos libres']"))).isDisplayed());
@@ -155,9 +150,28 @@ public class SinCodigoLibre {
 		
 		//Logout of WF
 		UsefulMethodsWF.logoutWF(driver);
+		
+		//Loop to delete cashiers from CTL
+		for (int i = 1; i < 800; i++) {
+			
+			String operator_code = StringUtils.leftPad(String.valueOf(i), 4, "0");
+			
+			CTLLine line = new CTLLine(operator_code);
+			line.setLockIndicator("1");
+			uFactory.updateCTLLine(line);
+		}
+		
+		//Loop to delete supervisors from CTL
+		for (int i = 801; i < 900; i++) {
+			
+			String operator_code = StringUtils.leftPad(String.valueOf(i), 4, "0");
+			
+			CTLLine line = new CTLLine(operator_code);
+			uFactory.updateCTLLine(line);
+		}
 	}
 
-	@Test (priority=5)
+	@Test (priority=3, groups = {"FullAutomated"})
 	public void deleteWFUser() {
 		
 		//Parameters of admin user
@@ -168,28 +182,5 @@ public class SinCodigoLibre {
 		String testUser = sh.getCell(1, 6).getContents();
 		
 		UsefulMethodsWF.deleteWFTestUser(adminUser, adminPass, testUser, driver);
-	}
-	
-	@Test (priority=10)
-	public void emptyCTL() throws IOException {
-		
-		//Loop to delete cashiers from CTL
-		for (int i = 3; i < 800; i++) {
-			
-			String operator_code = StringUtils.leftPad(String.valueOf(i), 4, "0");
-			
-			CTLLine line = new CTLLine(operator_code);
-			line.setLockIndicator("1");
-			uFactory.updateCTLLine(line);
-		}
-		
-		//Loop to delete supervisors from CTL
-		for (int i = 802; i < 900; i++) {
-			
-			String operator_code = StringUtils.leftPad(String.valueOf(i), 4, "0");
-			
-			CTLLine line = new CTLLine(operator_code);
-			uFactory.updateCTLLine(line);
-		}
 	}
 }
