@@ -31,22 +31,29 @@ public class SinCodigoLibre {
 	WebDriverWait wait;
 	String url = "";
 	
+	// Environmetn parameters
+	String long_login = "";
+	
 	UServiceClientFactory uFactory;
 	
-	@Test (priority=1, groups = {"FullAutomated"})
-	public void fillCTL() throws BiffException, IOException {
-		
-		// Setting objects to get parameters from excel sheet
-		fl = new File("Parametros\\AbmOperadoresPos\\Parametros.xls");
-		wb = Workbook.getWorkbook(fl);
-		sh = wb.getSheet("SinCodigoLibre");
+	@Test (priority = 1)
+	//@Test (priority = 1, groups = {"FullAutomated"})
+	public void launchWF() throws BiffException, IOException {
 		
 		// Setting driver
 		driver = UsefulMethodsWF.setUpWf();
 		wait = new WebDriverWait(driver, 45);
 		
+		// Create WebFront test user
+		UsefulMethodsWF.createWFTestUser(driver);
+	}
+
+	@Test (priority=2)
+	//@Test (priority=2, groups = {"FullAutomated"})
+	public void createCashierSupervisor() throws IOException, BiffException {
+		
 		// Getting long of the personnel number
-		String long_login = UsefulMethodsWF.getLongLogin();
+		long_login = UsefulMethodsWF.getLongLogin();
 		
 		uFactory = new UServiceClientFactory();
 		
@@ -91,26 +98,9 @@ public class SinCodigoLibre {
 			
 			uFactory.updateCTLLine(line);
 		}
-	}
-
-	@Test (priority=2, groups = {"FullAutomated"})
-	public void createCashierSupervisor() throws IOException {
-		
-		//Parameters of admin user
-		String adminUser = sh.getCell(1, 5).getContents();
-		String adminPass = sh.getCell(2, 5).getContents();
-		
-		//Parameters of WebFront test user
-		String testUser = sh.getCell(1, 6).getContents();
-		String testPass = sh.getCell(2, 6).getContents();
-		String role = sh.getCell(3, 6).getContents();
-		String functionality = sh.getCell(4, 6).getContents();
-		String menuBehaviour = sh.getCell(5, 6).getContents();
-		
-		UsefulMethodsWF.createWFTestUser(adminUser, adminPass, testUser, testPass, role, functionality, menuBehaviour, driver);
 		
 		// Login as a user
-		UsefulMethodsWF.loginWF(driver, testUser, testPass);
+		UsefulMethodsWF.loginWFTestUser(driver);;
 		
 		// Navigate to Mantenimiento de Usuarios
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='verticalmenu z-div']"))).click();
@@ -171,16 +161,10 @@ public class SinCodigoLibre {
 		}
 	}
 
-	@Test (priority=3, groups = {"FullAutomated"})
-	public void deleteWFUser() {
+	@Test (priority=3)
+	//@Test (priority=3, groups = {"FullAutomated"})
+	public void deleteWFUser() throws BiffException, IOException {
 		
-		//Parameters of admin user
-		String adminUser = sh.getCell(1, 5).getContents();
-		String adminPass = sh.getCell(2, 5).getContents();
-		
-		//Parameters of WebFront test user
-		String testUser = sh.getCell(1, 6).getContents();
-		
-		UsefulMethodsWF.deleteWFTestUser(adminUser, adminPass, testUser, driver);
+		UsefulMethodsWF.deleteWFTestUser(driver);
 	}
 }

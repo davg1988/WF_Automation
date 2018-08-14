@@ -17,13 +17,14 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import jxl.Sheet;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
 import utilidades.Environment;
-import utilidades.ScreenShot;
 import utilidades.UsefulMethodsWF;
 import webFrontCommonUtils.RServiceClientFactory;
 
@@ -38,44 +39,41 @@ public class CrearModificarEliminarUsuario {
 	List<Integer> registers = new ArrayList<>(10);
 	String long_login = "";
 	RServiceClientFactory factory;
-	
-	@Test (priority=1, groups = {"FullAutomated"})
+
+	//@BeforeTest
+	//@Test (priority=1, groups = {"FullAutomated"})
+	@Test (priority = 1)
 	public void launchWF() throws BiffException, IOException {
 		
 		// Configuring driver
 		driver = UsefulMethodsWF.setUpWf();
-		wait = new WebDriverWait(driver,45);
+		wait = new WebDriverWait(driver,50);
+		
+		// Create WebFront user for execute the test
+		UsefulMethodsWF.createWFTestUser(driver);	
+	}
+	
+	@Test (priority=6)
+	//@Test (priority=6, groups = {"FullAutomated"})
+	public void insertNewUser() throws Exception {
+		
 		long_login = UsefulMethodsWF.getLongLogin();
+		
 		factory = new RServiceClientFactory();
+		
+		//Login with WebFront test user
+		UsefulMethodsWF.loginWFTestUser(driver);
+		
+		// Go to Mantenimiento de Usuarios
+		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='verticalmenu z-div']"))).click();
+		wait.until(ExpectedConditions.elementToBeClickable(driver.findElements(By.xpath("//*[@class='z-toolbarbutton-cnt']")).get(0))).click();
 		
 		// Configure objects for data provider
 		fl = new File("Parametros\\AbmOperadoresPos\\Parametros.xls");
 		wb = Workbook.getWorkbook(fl);
 		sh = wb.getSheet("CrearEliminarModificar");
 		
-		// Getting parameters from excel file
-		String adminUser = sh.getCell(1,5).getContents();
-		String adminPass = sh.getCell(2,5).getContents();
-		String user = sh.getCell(1,6).getContents();
-		String pass = sh.getCell(2,6).getContents();
-		String role = sh.getCell(3,6).getContents();
-		String functionality = sh.getCell(4,6).getContents();
-		String menuBehaviour = sh.getCell(5,6).getContents();
-		
-		// Create WebFront user for execute the test
-		UsefulMethodsWF.createWFTestUser(adminUser, adminPass, user, pass, role, functionality, menuBehaviour, driver);
-		
-		// Login as a user
-		UsefulMethodsWF.loginWF(driver, user, pass);
-		
-		// Go to Mantenimiento de Usuarios
-		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='verticalmenu z-div']"))).click();
-		wait.until(ExpectedConditions.elementToBeClickable(driver.findElements(By.xpath("//*[@class='z-toolbarbutton-cnt']")).get(0))).click();
-	}
-	
-	@Test (priority=6, groups = {"FullAutomated"})
-	public void insertNewUser() throws Exception {
-		
+		// Loop to create the pos users
 		for (int i = 11; i < sh.getRows(); i++) {
 			
 			// Obtain Parameters From Excel File
@@ -97,7 +95,8 @@ public class CrearModificarEliminarUsuario {
 		}		
 	}
 	
-	@Test (priority=7, groups = {"FullAutomated"})
+	@Test (priority=7)
+	//@Test (priority=7, groups = {"FullAutomated"})
 	public void modifyUser() throws Exception {
 		
 		//variable that indicates the index of the register that is going to be checked
@@ -128,14 +127,14 @@ public class CrearModificarEliminarUsuario {
 		}		
 	}
 	
-	@Test (priority=8, groups = {"FullAutomated"})
+	@Test (priority=8)
+	//@Test (priority=8, groups = {"FullAutomated"})
 	public void deleteUser() throws Exception {
 		
 		int count = 1;
 		for (int i = 11; i < sh.getRows(); i++) {
 			String name = sh.getCell(6,i).getContents();
 			deletePosOperator(driver, name);
-			ScreenShot.takeSnapShot(driver, "Evidencia\\AbmPosOperator\\CrearModificarEliminarUsuario\\EliminarUsuario"+ count +".png");
 			int register = (int) registers.get(count-1);
 			verificationDeletedUser(name, factory, driver, register);
 			count++;
@@ -143,22 +142,19 @@ public class CrearModificarEliminarUsuario {
 		UsefulMethodsWF.logoutWF(driver);
 	}
 	
-	@Test (priority=9, groups = {"FullAutomated"})
-	public void closeWF() {
+	//@AfterTest
+	//@Test (priority=9, groups = {"FullAutomated"})
+	@Test (priority = 9)
+	public void closeWF() throws BiffException, IOException {
 		
-		//Login as an admin
-		String user, pass;
-		user = sh.getCell(1,5).getContents();
-		pass = sh.getCell(2,5).getContents();
-		String name = sh.getCell(1,5).getContents();
-		UsefulMethodsWF.deleteWFTestUser(user, pass, name, driver);
+		UsefulMethodsWF.deleteWFTestUser(driver);
 
 	}
 	
 	//********************* Methods **********************
 	
 	public static void deletePosOperator (WebDriver driver, String name) {
-		WebDriverWait wait = new WebDriverWait(driver, 40);
+		WebDriverWait wait = new WebDriverWait(driver, 45);
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='z-listcell-cnt z-overflow-hidden' and text()=\""+name+"\"]"))).click();
 		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@class='z-button-cm'and text()=' Baja']"))).click();
 		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@class='z-messagebox-btn z-button-os' and text()='Yes']"))).click();
@@ -166,7 +162,7 @@ public class CrearModificarEliminarUsuario {
 	}
 	
 	public static void createPosOperator (WebDriver driver, String role, String name, String login) {
-		WebDriverWait wait = new WebDriverWait(driver, 40);
+		WebDriverWait wait = new WebDriverWait(driver, 45);
 		
 		// Click on Insertar button
 		wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(By.className("z-button-cm"), 2));
@@ -217,14 +213,10 @@ public class CrearModificarEliminarUsuario {
 	
 	public static void verificationCreatedUser(String username, String login, RServiceClientFactory factory, WebDriver driver, String long_login, int line) throws SQLException, IOException {
 		
-		System.out.println("Line to verify: "+ line);
-		
 		// Verification on WF
 		Assert.assertEquals(true, driver.findElement(By.xpath("//*[@class='z-listcell-cnt z-overflow-hidden' and text()=\""+username+"\"]")).isDisplayed());
 		
 		// Verification on CTL File
-		System.out.println("Name on CTL: "+factory.getCTLFunction(line).getName().substring(0, username.length()));
-		System.out.println("Name on Excel: "+ username);
 		Assert.assertEquals(factory.getCTLFunction(line).getName().substring(0, username.length()), username);
 		Assert.assertEquals(factory.getCTLFunction(line).getPersonnelNo(), StringUtils.leftPad(login, Integer.parseInt(long_login), '0'));
 		
@@ -238,6 +230,7 @@ public class CrearModificarEliminarUsuario {
 		rs.next();
 		Assert.assertEquals(username, rs.getString("name").substring(0, username.length()));
 		Assert.assertEquals(rs.getString("personnel_number"),login);
+		db.close();
 		
 		// Verification on CTL that there is no displacement of the register
 		if (long_login.equals("12")) {
@@ -267,5 +260,6 @@ public class CrearModificarEliminarUsuario {
 		String empty_name_db = String.format("%"+name.length()+"s", "");
 		Assert.assertEquals(rs.getString("name").substring(0, name.length()),empty_name_db);
 		Assert.assertEquals(rs.getString("personnel_number"),"0");
+		db.close();
 	}
 }

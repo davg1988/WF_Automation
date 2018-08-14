@@ -32,12 +32,21 @@ public class HabilitarDeshabilitar {
 	List<Integer> registers = new ArrayList<>(10);
 	String long_login = "";
 	
-	@Test (priority=1, groups = {"FullAutomated"})
-	public void launchWFAndSetParameters () throws BiffException, IOException {
+	@Test (priority=1)
+	//@Test (priority=1, groups = {"FullAutomated"})
+	public void launchWF () throws BiffException, IOException {
 		
 		//Setting the driver
 		driver = UsefulMethodsWF.setUpWf();
 		wait = new WebDriverWait(driver,45);
+
+		//Create WF test user
+		UsefulMethodsWF.createWFTestUser(driver);	
+	}
+
+	@Test (priority = 9)
+	//@Test (priority = 9, groups = {"FullAutomated"})
+	public void disablePosOperator() throws Exception {
 		
 		//Getting the long of the personnel number configured in UserWatcher.properties
 		long_login = UsefulMethodsWF.getLongLogin();
@@ -45,28 +54,9 @@ public class HabilitarDeshabilitar {
 		//Instance of RServiceClientFactory
 		factory = new RServiceClientFactory();
 		
-		//Getting parameters to launch browser
 		fl = new File("Parametros\\AbmOperadoresPos\\Parametros.xls");
 		wb = Workbook.getWorkbook(fl);
 		sh = wb.getSheet("HabilitarDeshabilitar");
-		
-		//Getting admin credentials from excel file
-		String adminUser = sh.getCell(1,5).getContents();
-		String adminPass = sh.getCell(2,5).getContents();
-		
-		//Getting data of WebFront User to create for the execution of test
-		String user = sh.getCell(1,6).getContents();
-		String pass = sh.getCell(2,6).getContents();
-		String role = sh.getCell(3,6).getContents();
-		String functionality = sh.getCell(4,6).getContents();
-		String menuBehaviour = sh.getCell(5,6).getContents();
-
-		//Create WF test user
-		UsefulMethodsWF.createWFTestUser(adminUser, adminPass, user, pass, role, functionality, menuBehaviour, driver);	
-	}
-
-	@Test (priority = 9, groups = {"FullAutomated"})
-	public void disablePosOperator() throws Exception {
 		
 		//Login to WF and go to Mantenimiento de Usuarios
 		String user = sh.getCell(1,6).getContents();
@@ -113,7 +103,8 @@ public class HabilitarDeshabilitar {
 		}
 	}
 	
-	@Test (priority = 11, groups = {"FullAutomated"})
+	@Test (priority = 11)
+	//@Test (priority = 11, groups = {"FullAutomated"})
 	public void enablePosOperator() throws Exception {
 		
 		int cont_icons = 2;
@@ -145,17 +136,11 @@ public class HabilitarDeshabilitar {
 		UsefulMethodsWF.logoutWF(driver);
 	}
 	
-	@Test (priority=15, groups = {"FullAutomated"})
-	public void closeWF() {
+	@Test (priority=15)
+	//@Test (priority=15, groups = {"FullAutomated"})
+	public void closeWF() throws BiffException, IOException {
 		
-		//Login as an admin
-		String user, pass;
-		user = sh.getCell(1,5).getContents();
-		pass = sh.getCell(2,5).getContents();
-		//Name of the WF user used to do the test
-		String name = sh.getCell(1,5).getContents();
-		
-		UsefulMethodsWF.deleteWFTestUser(user, pass, name, driver);
+		UsefulMethodsWF.deleteWFTestUser(driver);
 	}
 	
 	// **************************** METHODS USED IN THE CLASS *************************************

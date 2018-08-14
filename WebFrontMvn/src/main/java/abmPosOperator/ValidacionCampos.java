@@ -26,41 +26,34 @@ public class ValidacionCampos {
 	public File fl;
 	public RServiceClientFactory factory;
 	
-	@Test (priority=1, groups = {"FullAutomated"})
+	@Test (priority=1)
+	//@Test (priority=1, groups = {"FullAutomated"})
 	public void launchWF() throws BiffException, IOException {
 		
 		//Setting driver
 		driver = UsefulMethodsWF.setUpWf();
 		wait = new WebDriverWait(driver,45);
+			
+		UsefulMethodsWF.createWFTestUser(driver);
+	}
+	
+	@Test (priority=4)
+	//@Test (priority=4, groups = {"FullAutomated"})
+	public void validateFields() throws Exception {
+		
 		factory = new RServiceClientFactory();
+		
+		UsefulMethodsWF.loginWFTestUser(driver);
+		
+		//Navigate to mantenimiento de usuarios
+		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='verticalmenu z-div']"))).click();
+		wait.until(ExpectedConditions.elementToBeClickable(driver.findElements(By.xpath("//*[@class='z-toolbarbutton-cnt']")).get(0))).click();
 		
 		//Extracting parameters from Excel file
 		fl = new File("Parametros\\AbmOperadoresPos\\Parametros.xls");
 		wb = Workbook.getWorkbook(fl);
 		sh = wb.getSheet("ValidarCampos");
 		
-		//Getting parameters from excel file
-		String adminUser = sh.getCell(1,5).getContents();
-		String adminPass = sh.getCell(2,5).getContents();
-		String user = sh.getCell(1,6).getContents();
-		String pass = sh.getCell(2,6).getContents();
-		String role = sh.getCell(3,6).getContents();
-		String functionality = sh.getCell(4,6).getContents();
-		String menuBehaviour = sh.getCell(5,6).getContents();
-			
-		UsefulMethodsWF.createWFTestUser(adminUser, adminPass, user, pass, role, functionality, menuBehaviour, driver);
-		
-		// Login with the test user
-		UsefulMethodsWF.loginWF(driver, user, pass);
-		
-		//Navigate to mantenimiento de usuarios
-		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='verticalmenu z-div']"))).click();
-		wait.until(ExpectedConditions.elementToBeClickable(driver.findElements(By.xpath("//*[@class='z-toolbarbutton-cnt']")).get(0))).click();
-	}
-	
-	@Test (priority=4, groups = {"FullAutomated"})
-	public void validateFields() throws Exception {
-
 		int count = 1;
 		for (int i = 10; i < sh.getRows(); i++) {
 		
@@ -117,15 +110,11 @@ public class ValidacionCampos {
 		UsefulMethodsWF.logoutWF(driver);
 	}
 	
-	@Test (priority=9, groups = {"FullAutomated"})
-	public void deleteTestUser() {
+	@Test (priority=9)
+	//@Test (priority=9, groups = {"FullAutomated"})
+	public void deleteTestUser() throws BiffException, IOException {
 		
-		//Login as an admin
-		String user, pass;
-		user = sh.getCell(1,5).getContents();
-		pass = sh.getCell(2,5).getContents();
-		String name = sh.getCell(1,6).getContents();
-		UsefulMethodsWF.deleteWFTestUser(user, pass, name, driver);
+		UsefulMethodsWF.deleteWFTestUser(driver);
 	}
 
 }
