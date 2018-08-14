@@ -44,7 +44,7 @@ public class CrearModificarEliminarUsuario {
 		
 		// Configuring driver
 		driver = UsefulMethodsWF.setUpWf();
-		wait = new WebDriverWait(driver,60);
+		wait = new WebDriverWait(driver,45);
 		long_login = UsefulMethodsWF.getLongLogin();
 		factory = new RServiceClientFactory();
 		

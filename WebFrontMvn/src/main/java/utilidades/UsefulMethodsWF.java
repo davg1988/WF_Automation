@@ -20,7 +20,7 @@ import jxl.read.biff.BiffException;
 public class UsefulMethodsWF {
 
 	public static void logoutWF(WebDriver driver) {
-		WebDriverWait wait = new WebDriverWait(driver, 20);
+		WebDriverWait wait = new WebDriverWait(driver, 45);
 		WebElement btnSalir = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@title='Salir del Programa']")));
 		wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//*[@class='z-modal-mask']")));
 		btnSalir.click();
@@ -30,7 +30,7 @@ public class UsefulMethodsWF {
 	
 	public static void loginWF (WebDriver driver, String user, String pass) {
 		
-		WebDriverWait wait = new WebDriverWait(driver, 20);
+		WebDriverWait wait = new WebDriverWait(driver, 45);
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@title='Introduzca el Nombre de Usuario']"))).sendKeys(user);
 		driver.findElement(By.xpath("//*[@class='textlogin z-textbox' and @title='Introduzca la Contraseña del Usuario']")).sendKeys(pass);
 		driver.findElement(By.xpath("//*[@class='z-button-cm' and text()=' Confirmar']")).click();
@@ -38,7 +38,7 @@ public class UsefulMethodsWF {
 	
 	public static void createWFTestUser(String adminUser, String adminPass, String testUser, String testPass, String role, String functionality, String menuBehaviour, WebDriver driver) {
 		
-		WebDriverWait wait = new WebDriverWait(driver,20);
+		WebDriverWait wait = new WebDriverWait(driver,45);
 		
 		UsefulMethodsWF.loginWF(driver, adminUser, adminPass);
 		
@@ -65,7 +65,7 @@ public class UsefulMethodsWF {
 
 	public static void deleteWFTestUser(String adminUser, String adminPass, String testUser, WebDriver driver) {
 
-		WebDriverWait wait = new WebDriverWait(driver,20);
+		WebDriverWait wait = new WebDriverWait(driver,45);
 		
 		UsefulMethodsWF.loginWF(driver, adminUser, adminPass);
 		

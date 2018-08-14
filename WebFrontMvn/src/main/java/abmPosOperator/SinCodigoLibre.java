@@ -43,7 +43,7 @@ public class SinCodigoLibre {
 		
 		// Setting driver
 		driver = UsefulMethodsWF.setUpWf();
-		wait = new WebDriverWait(driver, 40);
+		wait = new WebDriverWait(driver, 45);
 		
 		// Getting long of the personnel number
 		String long_login = UsefulMethodsWF.getLongLogin();

@@ -37,7 +37,7 @@ public class HabilitarDeshabilitar {
 		
 		//Setting the driver
 		driver = UsefulMethodsWF.setUpWf();
-		wait = new WebDriverWait(driver,40);
+		wait = new WebDriverWait(driver,45);
 		
 		//Getting the long of the personnel number configured in UserWatcher.properties
 		long_login = UsefulMethodsWF.getLongLogin();

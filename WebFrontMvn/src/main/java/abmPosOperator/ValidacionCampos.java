@@ -29,10 +29,9 @@ public class ValidacionCampos {
 	@Test (priority=1, groups = {"FullAutomated"})
 	public void launchWF() throws BiffException, IOException {
 		
-
 		//Setting driver
 		driver = UsefulMethodsWF.setUpWf();
-		wait = new WebDriverWait(driver,20);
+		wait = new WebDriverWait(driver,45);
 		factory = new RServiceClientFactory();
 		
 		//Extracting parameters from Excel file
