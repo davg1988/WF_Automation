@@ -5,8 +5,6 @@ import java.io.IOException;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
@@ -25,34 +23,26 @@ public class ModificarCancelar {
 	Workbook wb;
 	Sheet sh;
 	
-	@Test (priority = 1)
-	public void modifyCancel() throws BiffException, IOException {
+	@Test (priority= 1)
+	//@Test (priority= 1, groups= {"FullAutomated"})
+	public void launchWF() throws BiffException, IOException {
 		
 		//Setting Chrome browser
-		System.setProperty("webdriver.chrome.driver", "ChromeDriver\\chromedriver.exe");
-		ChromeOptions op = new ChromeOptions();
-		op.addArguments("--start-maximized");
-		driver = new ChromeDriver(op);
+		driver = UsefulMethodsWF.setUpWf();
 		wait = new WebDriverWait(driver, 40);
+
+		UsefulMethodsWF.createWFTestUser(driver);
+	}
+	
+	@Test (priority = 2)
+	public void modifyCancel() throws BiffException, IOException {
 		
 		//Getting parameters
 		fl = new File("Parametros\\TasaDeCambio\\Parametros.xls");
 		wb = Workbook.getWorkbook(fl);
 		sh = wb.getSheet("ModifyCancel");
-		String url = sh.getCell(1, 2).getContents();
 		
-		driver.get(url);
-		
-		String adminUser = sh.getCell(1, 5).getContents();
-		String adminPass = sh.getCell(2, 5).getContents();
-		String testUser = sh.getCell(1, 6).getContents();
-		String testPass = sh.getCell(2, 6).getContents();
-		String role = sh.getCell(3, 6).getContents();
-		String functionality = sh.getCell(4, 6).getContents();
-		String menuBehaviour = sh.getCell(5, 6).getContents();
-		
-		UsefulMethodsWF.createWFTestUser(adminUser, adminPass, testUser, testPass, role, functionality, menuBehaviour, driver);
-		UsefulMethodsWF.loginWF(driver, testUser, testPass);
+		UsefulMethodsWF.loginWFTestUser(driver);
 		
 		//Navigates to Tasa de Cambio 
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='verticalmenu z-div']"))).click();
@@ -134,10 +124,14 @@ public class ModificarCancelar {
 			//Go again to Tasa de Cambio
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='verticalmenu z-div']"))).click();
 			wait.until(ExpectedConditions.elementToBeClickable(driver.findElements(By.xpath("//*[@class='z-toolbarbutton-cnt']")).get(4))).click();
-
 		}
-		
 		UsefulMethodsWF.logoutWF(driver);
-		UsefulMethodsWF.deleteWFTestUser(adminUser, adminPass, testUser, driver);
+	}
+	
+	@Test (priority= 3)
+	//@Test (priority= 3, groups= {"FullAutomated"})
+	public void closeWF() throws BiffException, IOException {
+		
+		UsefulMethodsWF.deleteWFTestUser(driver);
 	}
 }
