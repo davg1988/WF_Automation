@@ -99,7 +99,6 @@ public class casoPositivo {
 			// Go again to Tasa de Cambio
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='verticalmenu z-div']"))).click();
 			wait.until(ExpectedConditions.elementToBeClickable(driver.findElements(By.xpath("//*[@class='z-toolbarbutton-cnt']")).get(4))).click();
-
 		}
 		
 		UsefulMethodsWF.logoutWF(driver);
