@@ -32,25 +32,16 @@ public class ValidacionCampos {
 	@Test (priority=1, groups = {"FullAutomated"})
 	public void launchWF() throws BiffException, IOException {
 		
+
+		//Setting driver
+		driver = UsefulMethodsWF.setUpWf();
+		wait = new WebDriverWait(driver,20);
+		factory = new RServiceClientFactory();
+		
 		//Extracting parameters from Excel file
 		fl = new File("Parametros\\AbmOperadoresPos\\Parametros.xls");
 		wb = Workbook.getWorkbook(fl);
 		sh = wb.getSheet("ValidarCampos");
-		//String url = sh.getCell(1,2).getContents();
-		
-		//Setting options to launch Chrome web browser
-//		System.setProperty("webdriver.chrome.driver", "ChromeDriver\\chromedriver.exe");
-//		ChromeOptions op = new ChromeOptions();
-//		op.addArguments("--start-maximized");
-//		driver = new ChromeDriver(op);
-//		wait = new WebDriverWait(driver,20);
-//		driver.get(url);
-		
-		//Setting the IP for the clients of Rest Service
-		//Environment.setEnv_ip(url);
-		driver = UsefulMethodsWF.setUpWf();
-		wait = new WebDriverWait(driver,20);
-		factory = new RServiceClientFactory();
 		
 		//Getting parameters from excel file
 		String adminUser = sh.getCell(1,5).getContents();
