@@ -36,18 +36,33 @@ public class UsefulMethodsWF {
 		driver.findElement(By.xpath("//*[@class='z-button-cm' and text()=' Confirmar']")).click();
 	}
 	
-	public static void createWFTestUser(String adminUser, String adminPass, String testUser, String testPass, String role, String functionality, String menuBehaviour, WebDriver driver) {
+	public static void createWFTestUser(WebDriver driver) throws BiffException, IOException {
+		
+		// Getting parameters from excel file
+		File fl = new File("Parametros\\\\EnvironmentParameters.xls");
+		Workbook wb = Workbook.getWorkbook(fl);
+		Sheet sh = wb.getSheet("Environment");
 		
 		WebDriverWait wait = new WebDriverWait(driver,45);
 		
+		// Getting admin user and password and login
+		String adminUser = sh.getCell(1, 6).getContents();
+		String adminPass = sh.getCell(1, 7).getContents();
 		UsefulMethodsWF.loginWF(driver, adminUser, adminPass);
 		
-		//Click on Gestion Login
+		// Click on Gestion Login
 		wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(By.xpath("//*[@class='z-toolbarbutton-cnt']"),1)).get(1).click();
 		
-		//Click on Insertar button
+		// Click on Insertar button
 		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//td[@class='z-button-cm' and text()=' Insertar']"))).click();
 
+		// Data to create the WebFront user to be used to execute the tests
+		String testUser = sh.getCell(1, 9).getContents();
+		String testPass = sh.getCell(1, 10).getContents();
+		String role = sh.getCell(1, 11).getContents();
+		String functionality = sh.getCell(1, 12).getContents();
+		String menuBehaviour = sh.getCell(1, 13).getContents();
+		
 		List<WebElement> txtFields = wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(By.xpath("//*[@class='z-textbox']"), 2));
 		txtFields.get(1).sendKeys(testUser);
 		txtFields.get(2).sendKeys(testPass);
@@ -63,8 +78,20 @@ public class UsefulMethodsWF {
 		UsefulMethodsWF.logoutWF(driver);
 	}
 
-	public static void deleteWFTestUser(String adminUser, String adminPass, String testUser, WebDriver driver) {
-
+	public static void deleteWFTestUser(WebDriver driver) throws BiffException, IOException {
+		
+		// Getting parameters from excel file
+		File fl = new File("Parametros\\\\EnvironmentParameters.xls");
+		Workbook wb = Workbook.getWorkbook(fl);
+		Sheet sh = wb.getSheet("Environment");
+		
+		// Getting admin user and password and login
+		String adminUser = sh.getCell(1, 6).getContents();
+		String adminPass = sh.getCell(1, 7).getContents();
+		
+		// WebFront user to be deleted
+		String testUser = sh.getCell(1, 9).getContents();
+		
 		WebDriverWait wait = new WebDriverWait(driver,45);
 		
 		UsefulMethodsWF.loginWF(driver, adminUser, adminPass);
@@ -97,6 +124,20 @@ public class UsefulMethodsWF {
 		driver.close();
 	}
 
+	public static void loginWFTestUser(WebDriver driver) throws BiffException, IOException {
+		
+		// Getting parameters from excel file
+		File fl = new File("Parametros\\\\EnvironmentParameters.xls");
+		Workbook wb = Workbook.getWorkbook(fl);
+		Sheet sh = wb.getSheet("Environment");
+		
+		// Getting admin user and password and login
+		String user = sh.getCell(1, 9).getContents();
+		String pass = sh.getCell(1, 10).getContents();
+		
+		loginWF(driver, user, pass);
+	}
+	
 	public static WebDriver setUpWf() throws BiffException, IOException {
 		
 		//Getting parameters of the test environment
