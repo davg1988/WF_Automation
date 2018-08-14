@@ -32,7 +32,7 @@ public class HabilitarDeshabilitar {
 	List<Integer> registers = new ArrayList<>(10);
 	String long_login = "";
 	
-	@Test (priority=1)
+	@Test (priority=1, groups = {"FullAutomated"})
 	public void launchWFAndSetParameters () throws BiffException, IOException {
 		
 		//Setting the driver
@@ -65,7 +65,7 @@ public class HabilitarDeshabilitar {
 		UsefulMethodsWF.createWFTestUser(adminUser, adminPass, user, pass, role, functionality, menuBehaviour, driver);	
 	}
 
-	@Test (priority = 9)
+	@Test (priority = 9, groups = {"FullAutomated"})
 	public void disablePosOperator() throws Exception {
 		
 		//Login to WF and go to Mantenimiento de Usuarios
@@ -113,7 +113,7 @@ public class HabilitarDeshabilitar {
 		}
 	}
 	
-	@Test (priority = 11)
+	@Test (priority = 11, groups = {"FullAutomated"})
 	public void enablePosOperator() throws Exception {
 		
 		int cont_icons = 2;
@@ -145,7 +145,7 @@ public class HabilitarDeshabilitar {
 		UsefulMethodsWF.logoutWF(driver);
 	}
 	
-	@Test (priority=15)
+	@Test (priority=15, groups = {"FullAutomated"})
 	public void closeWF() {
 		
 		//Login as an admin
