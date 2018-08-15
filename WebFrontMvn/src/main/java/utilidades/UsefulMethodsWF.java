@@ -46,8 +46,8 @@ public class UsefulMethodsWF {
 		WebDriverWait wait = new WebDriverWait(driver,45);
 		
 		// Getting admin user and password and login
-		String adminUser = sh.getCell(1, 6).getContents();
-		String adminPass = sh.getCell(1, 7).getContents();
+		String adminUser = sh.getCell(1, 7).getContents();
+		String adminPass = sh.getCell(1, 8).getContents();
 		UsefulMethodsWF.loginWF(driver, adminUser, adminPass);
 		
 		// Click on Gestion Login
@@ -57,11 +57,11 @@ public class UsefulMethodsWF {
 		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//td[@class='z-button-cm' and text()=' Insertar']"))).click();
 
 		// Data to create the WebFront user to be used to execute the tests
-		String testUser = sh.getCell(1, 9).getContents();
-		String testPass = sh.getCell(1, 10).getContents();
-		String role = sh.getCell(1, 11).getContents();
-		String functionality = sh.getCell(1, 12).getContents();
-		String menuBehaviour = sh.getCell(1, 13).getContents();
+		String testUser = sh.getCell(1, 10).getContents();
+		String testPass = sh.getCell(1, 11).getContents();
+		String role = sh.getCell(1, 12).getContents();
+		String functionality = sh.getCell(1, 13).getContents();
+		String menuBehaviour = sh.getCell(1, 14).getContents();
 		
 		List<WebElement> txtFields = wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(By.xpath("//*[@class='z-textbox']"), 2));
 		txtFields.get(1).sendKeys(testUser);
@@ -171,6 +171,19 @@ public class UsefulMethodsWF {
 		
 		return long_login;
 	}
+	
+	public static String getVisibleDigits() throws BiffException, IOException {
+		
+		//Getting parameters of the test environment
+		File fl = new File("Parametros\\EnvironmentParameters.xls");
+		Workbook wb = Workbook.getWorkbook(fl);
+		Sheet sh = wb.getSheet("Environment");
+		
+		//Getting the long of the personnel number configured in UserWatcher.properties
+		String visible_digits = sh.getCell(1, 5).getContents();
+		
+		return visible_digits;
+	}
 
 	public static void loginAdmin(WebDriver driver) throws BiffException, IOException {
 		
@@ -179,8 +192,8 @@ public class UsefulMethodsWF {
 		Workbook wb = Workbook.getWorkbook(fl);
 		Sheet sh = wb.getSheet("Environment");
 	
-		String adminUser = sh.getCell(1, 6).getContents();
-		String adminPass = sh.getCell(1, 7).getContents();
+		String adminUser = sh.getCell(1, 7).getContents();
+		String adminPass = sh.getCell(1, 8).getContents();
 		UsefulMethodsWF.loginWF(driver, adminUser, adminPass);
 	}
 }
