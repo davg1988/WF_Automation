@@ -159,7 +159,7 @@ public class CrearModificarEliminarUsuario {
 		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@class='z-window-highlighted-cnt']//*[@class='z-messagebox-btn z-button-os' and text()='OK']"))).click();
 	}
 	
-	public static void createPosOperator (WebDriver driver, String role, String name, String login) {
+	public static void createPosOperator (WebDriver driver, String role, String name, String login) throws BiffException, IOException {
 		WebDriverWait wait = new WebDriverWait(driver, 45);
 		
 		// Click on Insertar button
@@ -175,7 +175,7 @@ public class CrearModificarEliminarUsuario {
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='z-textbox' and @maxlength='20']"))).sendKeys(name);
 		
 		// Filling the login field
-		driver.findElements(By.xpath("//*[@class='z-textbox']")).get(3).clear();
+		driver.findElement(By.xpath("//*[@class='z-textbox' and @maxlenght='"+UsefulMethodsWF.getVisibleDigits()+"']")).clear();
 		driver.findElement(By.xpath("//*[@class='z-textbox z-textbox-focus']")).sendKeys(login);
 		
 		// Click on Confirmar button
