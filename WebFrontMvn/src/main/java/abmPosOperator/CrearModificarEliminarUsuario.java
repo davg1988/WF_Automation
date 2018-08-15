@@ -110,8 +110,8 @@ public class CrearModificarEliminarUsuario {
 			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@class='z-button-cm' and text()=' Modificar']"))).click();
 			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@class='z-textbox' and @maxlength='20']"))).clear();
 			driver.findElement(By.xpath("//*[@class='z-textbox z-textbox-focus' and @maxlength='20']")).sendKeys(modified_name);
-			driver.findElement(By.xpath("//*[@class='z-longbox']")).clear();
-			driver.findElement(By.xpath("//*[@class='z-longbox z-longbox-focus']")).sendKeys(modified_login);
+			driver.findElement(By.xpath("//*[@class='z-textbox' and @maxlength='"+UsefulMethodsWF.getVisibleDigits()+"']")).clear();
+			driver.findElement(By.xpath("//*[@class='z-textbox z-textbox-focus']")).sendKeys(modified_login);
 			driver.findElement(By.xpath("//*[@class='z-button-cm' and text()=' Confirmar']")).click();
 			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@class='z-window-highlighted-cnt']//*[@class='z-messagebox-btn z-button-os']"))).click();
 			
@@ -175,7 +175,7 @@ public class CrearModificarEliminarUsuario {
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='z-textbox' and @maxlength='20']"))).sendKeys(name);
 		
 		// Filling the login field
-		driver.findElement(By.xpath("//*[@class='z-textbox' and @maxlenght='"+UsefulMethodsWF.getVisibleDigits()+"']")).clear();
+		driver.findElement(By.xpath("//*[@class='z-textbox' and @maxlength='"+UsefulMethodsWF.getVisibleDigits()+"']")).clear();
 		driver.findElement(By.xpath("//*[@class='z-textbox z-textbox-focus']")).sendKeys(login);
 		
 		// Click on Confirmar button
