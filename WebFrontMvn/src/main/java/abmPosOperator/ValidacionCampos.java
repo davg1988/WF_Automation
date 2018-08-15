@@ -78,8 +78,8 @@ public class ValidacionCampos {
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='z-textbox' and @maxlength='20']"))).sendKeys(username);
 			
 			//Filling the login field
-			driver.findElement(By.xpath("//*[@class='z-longbox']")).clear();
-			driver.findElement(By.xpath("//*[@class='z-longbox z-longbox-focus']")).sendKeys(login);
+			driver.findElement(By.xpath("//*[@class='z-textbox' and @maxlength='"+UsefulMethodsWF.getVisibleDigits()+"']")).clear();
+			driver.findElement(By.xpath("//*[@class='z-textbox z-textbox-focus']")).sendKeys(login);
 			
 			if(role.equals("Supervisor")) {
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='z-intbox' and @maxlength='3']"))).clear();
