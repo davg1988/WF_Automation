@@ -86,11 +86,11 @@ public class UsefulMethodsWF {
 		Sheet sh = wb.getSheet("Environment");
 		
 		// Getting admin user and password and login
-		String adminUser = sh.getCell(1, 6).getContents();
-		String adminPass = sh.getCell(1, 7).getContents();
+		String adminUser = sh.getCell(1, 7).getContents();
+		String adminPass = sh.getCell(1, 8).getContents();
 		
 		// WebFront user to be deleted
-		String testUser = sh.getCell(1, 9).getContents();
+		String testUser = sh.getCell(1, 10).getContents();
 		
 		WebDriverWait wait = new WebDriverWait(driver,45);
 		
@@ -132,8 +132,8 @@ public class UsefulMethodsWF {
 		Sheet sh = wb.getSheet("Environment");
 		
 		// Getting admin user and password and login
-		String user = sh.getCell(1, 9).getContents();
-		String pass = sh.getCell(1, 10).getContents();
+		String user = sh.getCell(1, 10).getContents();
+		String pass = sh.getCell(1, 11).getContents();
 		
 		loginWF(driver, user, pass);
 	}
