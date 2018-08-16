@@ -7,8 +7,6 @@ import java.util.List;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -17,7 +15,6 @@ import org.testng.annotations.Test;
 import jxl.Sheet;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
-import utilidades.ScreenShot;
 import utilidades.UsefulMethodsWF;
 
 public class CrearUsuarioWF {
@@ -30,50 +27,34 @@ public class CrearUsuarioWF {
 	
 	@Test (priority=1)
 	public void launchWF() throws BiffException, IOException {
+		
+		driver = UsefulMethodsWF.setUpWf(); 
+		wait = new WebDriverWait(driver, 45);
+	}
+	
+	@Test (priority=4)
+	public void PositiveCase() throws Exception {
+		
+		// Login as an admin
+		UsefulMethodsWF.loginAdmin(driver);
+		
+		// Setting the data provider
 		fl = new File("Parametros\\PoliticasDeSeguridad\\politicas.xls");
 		wb = Workbook.getWorkbook(fl);
 		sh = wb.getSheet("CrearUsuarioWF");
-		String url = sh.getCell(1,2).getContents();
-		System.setProperty("webdriver.chrome.driver", "ChromeDriver\\chromedriver.exe");
-		ChromeOptions op = new ChromeOptions();
-		op.addArguments("--start-maximized");
-		driver = new ChromeDriver(op);
-		wait = new WebDriverWait(driver, 20);
-		driver.get(url);
-	}
-	
-	@Test (priority=2)
-	public void loginAdmin() {
-		
-		//Getting admin credentials from excel file
-		String adminUser = sh.getCell(1,4).getContents();
-		String adminPass = sh.getCell(2,4).getContents();
-		
-		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@title='Introduzca el Nombre de Usuario']"))).sendKeys(adminUser);
-		driver.findElement(By.xpath("//*[@class='textlogin z-textbox' and @title='Tipee la Contraseña del Usuario']")).sendKeys(adminPass);
-		driver.findElement(By.xpath("//*[@class='z-button-cm' and text()=' Confirmar']")).click();
-	}	
-	
-	@Test (priority=3)
-	public void navigation() {
 		
 		//Click on Gestion Login
 		wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(By.xpath("//*[@class='z-toolbarbutton-cnt']"),1)).get(1).click();
 		
 		//Click on Insertar button
 		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//td[@class='z-button-cm' and text()=' Insertar']"))).click();
-	}
-	
-	@Test (priority=4)
-	public void PositiveCase() throws Exception {
 		
 		//Getting parameters from the excel file
-		String user, pass, role, functionality, testCase;
+		String user, pass, role, functionality;
 		user = sh.getCell(1,7).getContents();
 		pass = sh.getCell(2,7).getContents();
 		role = sh.getCell(3, 7).getContents();
 		functionality = sh.getCell(4, 7).getContents();
-		testCase = sh.getCell(5, 7).getContents();
 		
 		//Filling text fields
 		List<WebElement> txtFields = wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(By.xpath("//*[@class='z-textbox']"), 2));
@@ -84,9 +65,6 @@ public class CrearUsuarioWF {
 		Select functionalityList = new Select(driver.findElements(By.xpath("//*[@class='z-selectbox']")).get(1));
 		functionalityList.selectByVisibleText(functionality);
 		driver.findElement(By.xpath("//*[@class='z-button-cm' and text()=' Confirmar']")).click();
-		
-		//Taking snapshot for evidence
-		ScreenShot.takeSnapShot(driver, "Evidencia\\PoliticasDeSeguridad\\"+testCase+".png");
 
 		//Deleting the user created before
 		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//td[@class='z-button-cm' and text()=' Insertar']")));
@@ -109,7 +87,7 @@ public class CrearUsuarioWF {
 		}
 
 		//Input data for Negative Test Cases
-		String user, pass, role, functionality, testCase;
+		String user, pass, role, functionality;
 		for (int i = 8; i < sh.getRows(); i++) {
 			
 			//Filling data for negative TC's
@@ -119,7 +97,6 @@ public class CrearUsuarioWF {
 			pass = sh.getCell(2,i).getContents();
 			role = sh.getCell(3, i).getContents();
 			functionality = sh.getCell(4, i).getContents();
-			testCase = sh.getCell(5, i).getContents();
 			if (i<=8) {
 				fields.get(1).sendKeys(user);
 			} else {
@@ -134,11 +111,11 @@ public class CrearUsuarioWF {
 		
 			//Confirm the input data
 			driver.findElement(By.xpath("//*[@class='z-button-cm' and text()=' Confirmar']")).click();
-			ScreenShot.takeSnapShot(driver, "Evidencia\\PoliticasDeSeguridad\\"+testCase+".png");
 			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@class='z-window-highlighted-cnt']//*[@class='z-messagebox-btn z-button-os']"))).click();			
-		} // End of the loop for negative test cases
+		}
 		
 		UsefulMethodsWF.logoutWF(driver);
+		driver.close();
 	}
 }
 
