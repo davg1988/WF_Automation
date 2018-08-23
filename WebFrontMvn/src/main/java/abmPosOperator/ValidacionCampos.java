@@ -13,7 +13,6 @@ import junit.framework.Assert;
 import jxl.Sheet;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
-import utilidades.ScreenShot;
 import utilidades.UsefulMethodsWF;
 import webFrontCommonUtils.RServiceClientFactory;
 
@@ -58,11 +57,9 @@ public class ValidacionCampos {
 		for (int i = 10; i < sh.getRows(); i++) {
 		
 			// Obtain Parameters From Excel File
-			String role, username, login, tc;
-			role = sh.getCell(1,i).getContents();
-			username = sh.getCell(2,i).getContents();
-			login = sh.getCell(3,i).getContents();
-			tc = sh.getCell(0,i).getContents();
+			String role = sh.getCell(1,i).getContents();
+			String username = sh.getCell(2,i).getContents();
+			String login = sh.getCell(3,i).getContents();
 			
 			//Insertion of new user
 			//Click on Insertar button
@@ -95,7 +92,6 @@ public class ValidacionCampos {
 			Assert.assertEquals("Error", window_message);
 			
 			//Click on OK
-			ScreenShot.takeSnapShot(driver, "Evidencia\\AbmPosOperator\\ValidacionCampos\\"+ tc + count +".png");
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='z-messagebox-window z-window-highlighted z-window-highlighted-shadow']//*[@class='z-messagebox-btn z-button-os']"))).click();
 			
 			//Click on Cancelar
