@@ -53,7 +53,6 @@ public class ValidacionCampos {
 		wb = Workbook.getWorkbook(fl);
 		sh = wb.getSheet("ValidarCampos");
 		
-		int count = 1;
 		for (int i = 10; i < sh.getRows(); i++) {
 		
 			// Obtain Parameters From Excel File
@@ -97,7 +96,6 @@ public class ValidacionCampos {
 			//Click on Cancelar
 			wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("z-modal-mask")));
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='z-button-cm' and text()=' Cancelar']"))).click();
-			count++;
 			
 			//Check that the fields for filling the information of the pos operator disappears
 			//before inserting a new one
