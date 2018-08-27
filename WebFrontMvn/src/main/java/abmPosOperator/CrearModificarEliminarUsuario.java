@@ -17,6 +17,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import jxl.Sheet;
@@ -28,23 +30,22 @@ import webFrontCommonUtils.RServiceClientFactory;
 
 public class CrearModificarEliminarUsuario {
 	
-	public WebDriver driver;
-	public Sheet sh;
-	public Workbook wb;
-	public File fl;
-	public WebDriverWait wait;
+	WebDriver driver;
+	Sheet sh;
+	Workbook wb;
+	File fl;
+	WebDriverWait wait;
 	int line = 0;
 	List<Integer> registers = new ArrayList<>(10);
 	String long_login = "";
 	RServiceClientFactory factory;
 
-	//@BeforeTest
-	//@Test (priority=1, groups = {"FullAutomated"})
-	@Test (priority = 1)
+	@BeforeTest
 	public void launchWF() throws BiffException, IOException {
 		
 		// Configuring driver
-		driver = UsefulMethodsWF.setUpWf();
+		UsefulMethodsWF.setDriver();
+		driver = UsefulMethodsWF.getDriver();
 		wait = new WebDriverWait(driver,50);
 		
 		// Create WebFront user for execute the test
@@ -52,7 +53,6 @@ public class CrearModificarEliminarUsuario {
 	}
 	
 	@Test (priority=6)
-	//@Test (priority=6, groups = {"FullAutomated"})
 	public void insertNewUser() throws Exception {
 		
 		long_login = UsefulMethodsWF.getLongLogin();
@@ -94,7 +94,6 @@ public class CrearModificarEliminarUsuario {
 	}
 	
 	@Test (priority=7)
-	//@Test (priority=7, groups = {"FullAutomated"})
 	public void modifyUser() throws Exception {
 		
 		//variable that indicates the index of the register that is going to be checked
@@ -126,7 +125,6 @@ public class CrearModificarEliminarUsuario {
 	}
 	
 	@Test (priority=8)
-	//@Test (priority=8, groups = {"FullAutomated"})
 	public void deleteUser() throws Exception {
 		
 		int count = 1;
@@ -140,9 +138,7 @@ public class CrearModificarEliminarUsuario {
 		UsefulMethodsWF.logoutWF(driver);
 	}
 	
-	//@AfterTest
-	//@Test (priority=9, groups = {"FullAutomated"})
-	@Test (priority = 9)
+	@AfterTest
 	public void closeWF() throws BiffException, IOException {
 		
 		UsefulMethodsWF.deleteWFTestUser(driver);

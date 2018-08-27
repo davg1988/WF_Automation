@@ -18,6 +18,8 @@ import jxl.Workbook;
 import jxl.read.biff.BiffException;
 
 public class UsefulMethodsWF {
+	
+	private static WebDriver driver = null;
 
 	public static void logoutWF(WebDriver driver) {
 		WebDriverWait wait = new WebDriverWait(driver, 45);
@@ -138,7 +140,7 @@ public class UsefulMethodsWF {
 		loginWF(driver, user, pass);
 	}
 	
-	public static WebDriver setUpWf() throws BiffException, IOException {
+	public static void setDriver() throws BiffException, IOException {
 		
 		//Getting parameters of the test environment
 		File fl = new File("Parametros\\EnvironmentParameters.xls");
@@ -149,13 +151,15 @@ public class UsefulMethodsWF {
 		System.setProperty("webdriver.chrome.driver", "ChromeDriver\\chromedriver.exe");
 		ChromeOptions op = new ChromeOptions();
 		op.addArguments("--start-maximized");
-		WebDriver driver = new ChromeDriver(op);
+		driver = new ChromeDriver(op);
 		String url = sh.getCell(1,3).getContents();
 		driver.get(url);
 		
 		//Setting the IP for the clients of Rest Service
 		Environment.setEnv_ip(url);
-		
+	}
+	
+	public static WebDriver getDriver() {
 		return driver;
 	}
 

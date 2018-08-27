@@ -25,15 +25,19 @@ public class ModificarUsuarioWF {
 	public File fl;
 	public WebDriverWait wait;
 	
-	@Test (priority=1)
+	//@Test (priority=1)
 	public void launchWF() throws BiffException, IOException {
 		
-		driver = UsefulMethodsWF.setUpWf(); 
+		UsefulMethodsWF.setDriver();
+		driver = UsefulMethodsWF.getDriver(); 
 		wait = new WebDriverWait(driver, 45);
 	}
 
-	@Test (priority=5)
+	@Test (priority=2)
 	public void modificarCasoPositivo() throws Exception {
+		
+		driver = UsefulMethodsWF.getDriver(); 
+		wait = new WebDriverWait(driver, 45);
 		
 		// Login as an admin
 		UsefulMethodsWF.loginAdmin(driver);
@@ -80,7 +84,7 @@ public class ModificarUsuarioWF {
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@class='z-label' and text()='"+ user_positive +"']"))).isDisplayed();
 	}
 	
-	@Test (priority=6)
+	@Test (priority=3)
 	public void modificarCasoNegativo() throws Exception {
 
 		int btnModificar = wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(By.xpath("//*[@class='z-button-cm' and text()=' Modificar']"),1)).size();

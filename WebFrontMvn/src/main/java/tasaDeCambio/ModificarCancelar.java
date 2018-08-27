@@ -23,19 +23,22 @@ public class ModificarCancelar {
 	Workbook wb;
 	Sheet sh;
 	
-	@Test (priority= 1)
-	//@Test (priority= 1, groups= {"FullAutomated"})
+	//@Test (priority=1)
 	public void launchWF() throws BiffException, IOException {
 		
 		//Setting Chrome browser
-		driver = UsefulMethodsWF.setUpWf();
-		wait = new WebDriverWait(driver, 40);
+		UsefulMethodsWF.setDriver();
+		driver = UsefulMethodsWF.getDriver();
+		wait = new WebDriverWait(driver, 45);
 
 		UsefulMethodsWF.createWFTestUser(driver);
 	}
 	
 	@Test (priority = 2)
 	public void modifyCancel() throws BiffException, IOException {
+		
+		driver = UsefulMethodsWF.getDriver();
+		wait = new WebDriverWait(driver, 45);
 		
 		//Getting parameters
 		fl = new File("Parametros\\TasaDeCambio\\Parametros.xls");
@@ -128,8 +131,7 @@ public class ModificarCancelar {
 		UsefulMethodsWF.logoutWF(driver);
 	}
 	
-	@Test (priority= 3)
-	//@Test (priority= 3, groups= {"FullAutomated"})
+	//@Test (priority=3)
 	public void closeWF() throws BiffException, IOException {
 		
 		UsefulMethodsWF.deleteWFTestUser(driver);

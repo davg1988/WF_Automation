@@ -28,20 +28,21 @@ public class SinCodigoLibre {
 	
 	//Objects to handle the browser
 	WebDriver driver;
+	//WebDriver driver;
 	WebDriverWait wait;
 	String url = "";
 	
-	// Environmetn parameters
+	// Environment parameters
 	String long_login = "";
 	
 	UServiceClientFactory uFactory;
 	
-	@Test (priority = 1)
-	//@Test (priority = 1, groups = {"FullAutomated"})
+	//@Test (priority = 1)
 	public void launchWF() throws BiffException, IOException {
 		
 		// Setting driver
-		driver = UsefulMethodsWF.setUpWf();
+		UsefulMethodsWF.setDriver();
+		driver = UsefulMethodsWF.getDriver();
 		wait = new WebDriverWait(driver, 45);
 		
 		// Create WebFront test user
@@ -49,8 +50,10 @@ public class SinCodigoLibre {
 	}
 
 	@Test (priority=2)
-	//@Test (priority=2, groups = {"FullAutomated"})
 	public void createCashierSupervisor() throws IOException, BiffException {
+		
+		driver = UsefulMethodsWF.getDriver();
+		wait = new WebDriverWait(driver, 45);
 		
 		// Getting long of the personnel number
 		long_login = UsefulMethodsWF.getLongLogin();
@@ -161,8 +164,7 @@ public class SinCodigoLibre {
 		}
 	}
 
-	@Test (priority=3)
-	//@Test (priority=3, groups = {"FullAutomated"})
+	//@Test (priority=3)
 	public void deleteWFUser() throws BiffException, IOException {
 		
 		UsefulMethodsWF.deleteWFTestUser(driver);

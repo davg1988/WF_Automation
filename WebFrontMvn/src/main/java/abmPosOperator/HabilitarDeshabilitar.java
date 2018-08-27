@@ -32,21 +32,21 @@ public class HabilitarDeshabilitar {
 	List<Integer> registers = new ArrayList<>(10);
 	String long_login = "";
 	
-	@Test (priority=1)
-	//@Test (priority=1, groups = {"FullAutomated"})
+	//@Test (priority=1)
 	public void launchWF () throws BiffException, IOException {
 		
 		//Setting the driver
-		driver = UsefulMethodsWF.setUpWf();
 		wait = new WebDriverWait(driver,45);
 
 		//Create WF test user
 		UsefulMethodsWF.createWFTestUser(driver);	
 	}
 
-	@Test (priority = 9)
-	//@Test (priority = 9, groups = {"FullAutomated"})
+	@Test (priority = 2)
 	public void disablePosOperator() throws Exception {
+		
+		driver = UsefulMethodsWF.getDriver();
+		wait = new WebDriverWait(driver,45);
 		
 		//Getting the long of the personnel number configured in UserWatcher.properties
 		long_login = UsefulMethodsWF.getLongLogin();
@@ -59,9 +59,7 @@ public class HabilitarDeshabilitar {
 		sh = wb.getSheet("HabilitarDeshabilitar");
 		
 		//Login to WF and go to Mantenimiento de Usuarios
-		String user = sh.getCell(1,6).getContents();
-		String pass = sh.getCell(2,6).getContents();
-		UsefulMethodsWF.loginWF(driver, user, pass);
+		UsefulMethodsWF.loginWFTestUser(driver);
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='verticalmenu z-div']"))).click();
 		wait.until(ExpectedConditions.elementToBeClickable(driver.findElements(By.xpath("//*[@class='z-toolbarbutton-cnt']")).get(0))).click();
 		
@@ -103,8 +101,7 @@ public class HabilitarDeshabilitar {
 		}
 	}
 	
-	@Test (priority = 11)
-	//@Test (priority = 11, groups = {"FullAutomated"})
+	@Test (priority = 3)
 	public void enablePosOperator() throws Exception {
 		
 		int cont_icons = 2;
@@ -136,8 +133,7 @@ public class HabilitarDeshabilitar {
 		UsefulMethodsWF.logoutWF(driver);
 	}
 	
-	@Test (priority=15)
-	//@Test (priority=15, groups = {"FullAutomated"})
+	//@Test (priority=4)
 	public void closeWF() throws BiffException, IOException {
 		
 		UsefulMethodsWF.deleteWFTestUser(driver);

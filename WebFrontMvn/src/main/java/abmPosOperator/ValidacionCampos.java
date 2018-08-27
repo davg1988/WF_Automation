@@ -18,27 +18,27 @@ import webFrontCommonUtils.RServiceClientFactory;
 
 public class ValidacionCampos {
 
-	public WebDriver driver;
-	public WebDriverWait wait;
-	public Sheet sh;
-	public Workbook wb;
-	public File fl;
-	public RServiceClientFactory factory;
+	WebDriver driver;
+	WebDriverWait wait;
+	Sheet sh;
+	Workbook wb;
+	File fl;
+	RServiceClientFactory factory;
 	
-	@Test (priority=1)
-	//@Test (priority=1, groups = {"FullAutomated"})
+	//@Test (priority=1)
 	public void launchWF() throws BiffException, IOException {
 		
 		//Setting driver
-		driver = UsefulMethodsWF.setUpWf();
 		wait = new WebDriverWait(driver,45);
 			
 		UsefulMethodsWF.createWFTestUser(driver);
 	}
 	
-	@Test (priority=4)
-	//@Test (priority=4, groups = {"FullAutomated"})
+	@Test (priority=2)
 	public void validateFields() throws Exception {
+		
+		driver = UsefulMethodsWF.getDriver();
+		wait = new WebDriverWait(driver,45);
 		
 		factory = new RServiceClientFactory();
 		
@@ -104,8 +104,7 @@ public class ValidacionCampos {
 		UsefulMethodsWF.logoutWF(driver);
 	}
 	
-	@Test (priority=9)
-	//@Test (priority=9, groups = {"FullAutomated"})
+	//@Test (priority=3)
 	public void deleteTestUser() throws BiffException, IOException {
 		
 		UsefulMethodsWF.deleteWFTestUser(driver);

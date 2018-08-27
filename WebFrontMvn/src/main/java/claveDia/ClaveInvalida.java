@@ -23,19 +23,21 @@ public class ClaveInvalida {
 	Sheet sh;
 	File fl;
 
-	@Test (priority= 1)
-	//@Test (priority= 1, groups= {"FullAutomated"})
+	//@Test (priority=1)
 	public void launchWF() throws BiffException, IOException {
-
-		driver = UsefulMethodsWF.setUpWf();
-		wait = new WebDriverWait(driver, 40);
+		
+		UsefulMethodsWF.setDriver();
+		driver = UsefulMethodsWF.getDriver();
+		wait = new WebDriverWait(driver, 45);
 
 		UsefulMethodsWF.createWFTestUser(driver);
 	}
 
-	@Test (priority= 2)
-	//@Test (priority= 2, groups= {"FullAutomated"})
+	@Test (priority=2)
 	public void insertInvalidKey() throws BiffException, IOException {
+		
+		driver = UsefulMethodsWF.getDriver();
+		wait = new WebDriverWait(driver, 45);
 		
 		// Login with webfront test user
 		UsefulMethodsWF.loginWFTestUser(driver);
@@ -70,8 +72,7 @@ public class ClaveInvalida {
 		UsefulMethodsWF.logoutWF(driver);
 	}
 	
-	@Test (priority= 3)
-	//@Test (priority= 3, groups= {"FullAutomated"})
+	//@Test (priority=3)
 	public void closeWF() throws BiffException, IOException {
 		
 		UsefulMethodsWF.deleteWFTestUser(driver);

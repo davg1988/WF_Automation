@@ -25,15 +25,19 @@ public class CrearContrasenhaWF {
 	public File fl;
 	public WebDriverWait wait;
 	
-	@Test (priority=1)
+	//@Test (priority=1)
 	public void launchWF() throws BiffException, IOException {
 		
-		driver = UsefulMethodsWF.setUpWf(); 
+		UsefulMethodsWF.setDriver();
+		driver = UsefulMethodsWF.getDriver();
 		wait = new WebDriverWait(driver, 45);
 	}
 	
-	@Test (priority=4)
+	@Test (priority=2)
 	public void PositiveCase() throws Exception {
+		
+		driver = UsefulMethodsWF.getDriver();
+		wait = new WebDriverWait(driver, 45);
 		
 		// Login as an admin
 		UsefulMethodsWF.loginAdmin(driver);
@@ -72,7 +76,7 @@ public class CrearContrasenhaWF {
 		btnOK.get(0).click();
 	}
 	
-	@Test (priority=5)
+	@Test (priority=3)
 	public void NegativeCase() throws Exception {
 
 		//Click on Insertar button

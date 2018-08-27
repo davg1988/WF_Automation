@@ -25,15 +25,19 @@ public class ModificarContrasenhaWF {
 	public File fl;
 	public WebDriverWait wait;
 	
-	@Test (priority=1)
+	//@Test (priority=1)
 	public void launchWF() throws BiffException, IOException {
 		
-		driver = UsefulMethodsWF.setUpWf(); 
+		UsefulMethodsWF.setDriver();
+		driver = UsefulMethodsWF.getDriver();
 		wait = new WebDriverWait(driver, 45);
 	}
 	
-	@Test (priority=4)
+	@Test (priority=2)
 	public void positiveCase() throws Exception {
+		
+		driver = UsefulMethodsWF.getDriver();
+		wait = new WebDriverWait(driver, 45);
 
 		// Login as an admin
 		UsefulMethodsWF.loginAdmin(driver);
@@ -83,7 +87,7 @@ public class ModificarContrasenhaWF {
 		
 	}
 	
-	@Test (priority=6)
+	@Test (priority=3)
 	public void negativeCase() throws Exception {
 
 		//Getting data from excel file
