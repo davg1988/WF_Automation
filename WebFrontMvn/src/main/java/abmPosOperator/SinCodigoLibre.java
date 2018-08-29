@@ -52,6 +52,7 @@ public class SinCodigoLibre {
 	@Test (priority=2)
 	public void createCashierSupervisor() throws IOException, BiffException {
 		
+		UsefulMethodsWF.setDriver();
 		driver = UsefulMethodsWF.getDriver();
 		wait = new WebDriverWait(driver, 45);
 		
@@ -162,6 +163,7 @@ public class SinCodigoLibre {
 			CTLLine line = new CTLLine(operator_code);
 			uFactory.updateCTLLine(line);
 		}
+		driver.close();
 	}
 
 	//@Test (priority=3)

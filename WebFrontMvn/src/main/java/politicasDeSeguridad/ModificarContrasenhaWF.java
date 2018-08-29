@@ -36,6 +36,7 @@ public class ModificarContrasenhaWF {
 	@Test (priority=2)
 	public void positiveCase() throws Exception {
 		
+		UsefulMethodsWF.setDriver();
 		driver = UsefulMethodsWF.getDriver();
 		wait = new WebDriverWait(driver, 45);
 

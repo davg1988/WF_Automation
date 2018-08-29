@@ -35,7 +35,7 @@ public class UsefulMethodsWF {
 		WebDriverWait wait = new WebDriverWait(driver, 45);
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@title='Introduzca el Nombre de Usuario']"))).sendKeys(user);
 		driver.findElement(By.xpath("//*[@class='textlogin z-textbox' and @title='Introduzca la Contraseña del Usuario']")).sendKeys(pass);
-		driver.findElement(By.xpath("//*[@class='z-button-cm' and text()=' Confirmar']")).click();
+		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='z-button-cm' and text()=' Confirmar']"))).click();
 	}
 	
 	public static void createWFTestUser(WebDriver driver) throws BiffException, IOException {
@@ -100,7 +100,8 @@ public class UsefulMethodsWF {
 		
 		//Go To Gestion Login
 		wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//*[@class='z-window-embedded']//*[@class='z-toolbarbutton-cnt']"))).get(1).click();
-		driver.findElement(By.xpath("//*[@class='titlebar nomargin_left z-hbox']")).click();
+		wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//div[@class='z-modal-mask']")));
+		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='titlebar nomargin_left z-hbox']"))).click();
 		
 		//Find test user
 		List<WebElement> white_rows = driver.findElements(By.xpath("//*[@class='z-row']//*[@class='z-listcell-cnt z-overflow-hidden']"));

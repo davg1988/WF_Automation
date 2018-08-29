@@ -36,15 +36,17 @@ public class HabilitarDeshabilitar {
 	public void launchWF () throws BiffException, IOException {
 		
 		//Setting the driver
+		UsefulMethodsWF.setDriver();
 		wait = new WebDriverWait(driver,45);
 
 		//Create WF test user
-		UsefulMethodsWF.createWFTestUser(driver);	
+		//UsefulMethodsWF.createWFTestUser(driver);	
 	}
 
 	@Test (priority = 2)
 	public void disablePosOperator() throws Exception {
 		
+		UsefulMethodsWF.setDriver();
 		driver = UsefulMethodsWF.getDriver();
 		wait = new WebDriverWait(driver,45);
 		
@@ -110,6 +112,7 @@ public class HabilitarDeshabilitar {
 		//Loops to enable the pos operators
 		for(int i = 12; i < sh.getRows(); i++) {
 			String name = sh.getCell(1,i).getContents();
+			wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//div[@class='z-modal-mask']")));
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='z-listcell-cnt z-overflow-hidden' and text()=\""+name+"\"]"))).click();
 			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@class='z-button-cm'and text()=' Habilitar']"))).click();
 			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@class='z-messagebox-btn z-button-os' and text()='Yes']"))).click();
@@ -131,6 +134,7 @@ public class HabilitarDeshabilitar {
 			CrearModificarEliminarUsuario.deletePosOperator(driver, name);
 		}
 		UsefulMethodsWF.logoutWF(driver);
+		driver.close();
 	}
 	
 	//@Test (priority=4)

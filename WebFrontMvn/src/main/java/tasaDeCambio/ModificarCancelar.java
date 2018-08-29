@@ -37,6 +37,7 @@ public class ModificarCancelar {
 	@Test (priority = 2)
 	public void modifyCancel() throws BiffException, IOException {
 		
+		UsefulMethodsWF.setDriver();
 		driver = UsefulMethodsWF.getDriver();
 		wait = new WebDriverWait(driver, 45);
 		
@@ -129,6 +130,7 @@ public class ModificarCancelar {
 			wait.until(ExpectedConditions.elementToBeClickable(driver.findElements(By.xpath("//*[@class='z-toolbarbutton-cnt']")).get(4))).click();
 		}
 		UsefulMethodsWF.logoutWF(driver);
+		driver.close();
 	}
 	
 	//@Test (priority=3)

@@ -36,6 +36,7 @@ public class CrearUsuarioWF {
 	@Test (priority=2)
 	public void PositiveCase() throws Exception {
 		
+		UsefulMethodsWF.setDriver();
 		driver = UsefulMethodsWF.getDriver();
 		wait = new WebDriverWait(driver, 45);
 		
@@ -114,7 +115,8 @@ public class CrearUsuarioWF {
 			functionalityList.selectByVisibleText(functionality);
 		
 			//Confirm the input data
-			driver.findElement(By.xpath("//*[@class='z-button-cm' and text()=' Confirmar']")).click();
+			wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//div[@class='z-modal-mask']")));
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='z-button-cm' and text()=' Confirmar']"))).click();
 			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@class='z-window-highlighted-cnt']//*[@class='z-messagebox-btn z-button-os']"))).click();			
 		}
 		

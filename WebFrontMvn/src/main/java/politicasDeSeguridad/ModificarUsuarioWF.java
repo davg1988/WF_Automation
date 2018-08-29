@@ -36,6 +36,7 @@ public class ModificarUsuarioWF {
 	@Test (priority=2)
 	public void modificarCasoPositivo() throws Exception {
 		
+		UsefulMethodsWF.setDriver();
 		driver = UsefulMethodsWF.getDriver(); 
 		wait = new WebDriverWait(driver, 45);
 		
@@ -57,7 +58,9 @@ public class ModificarUsuarioWF {
 		String pass = sh.getCell(2,7).getContents();
 		String role = sh.getCell(3,7).getContents();
 		String functionality = sh.getCell(4,7).getContents();
-
+		
+		int cantidad_usuarios = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//*[@class='z-button-cm' and text()=' Modificar']"))).size();
+		
 		List<WebElement> txtFields = wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(By.xpath("//*[@class='z-textbox']"), 2));
 		txtFields.get(1).sendKeys(user);
 		txtFields.get(2).sendKeys(pass);
@@ -70,7 +73,7 @@ public class ModificarUsuarioWF {
 		//Getting data from excel file
 		String user_positive = sh.getCell(1,8).getContents();	
 		
-		int btnModificar = wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(By.xpath("//*[@class='z-button-cm' and text()=' Modificar']"),1)).size();
+		int btnModificar = wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(By.xpath("//*[@class='z-button-cm' and text()=' Modificar']"),cantidad_usuarios)).size();
 		driver.findElements(By.xpath("//*[@class='z-button-cm' and text()=' Modificar']")).get(btnModificar-1).click();
 
 		List<WebElement> fields = wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(By.xpath("//*[@class='z-textbox']"), 2));

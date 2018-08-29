@@ -36,6 +36,7 @@ public class ClaveInvalida {
 	@Test (priority=2)
 	public void insertInvalidKey() throws BiffException, IOException {
 		
+		UsefulMethodsWF.setDriver();
 		driver = UsefulMethodsWF.getDriver();
 		wait = new WebDriverWait(driver, 45);
 		
@@ -63,6 +64,7 @@ public class ClaveInvalida {
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='z-textbox']"))).clear();
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='z-textbox']"))).sendKeys(invalid_input);
 			}
+			wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//*[@class='z-modal-mask']")));
 			wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//*[@class='z-button-cm']"))).get(0).click();
 			Assert.assertEquals(wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='z-messagebox-window z-window-highlighted z-window-highlighted-shadow']//*[@class='z-label']"))).getText(), "El valor ingresado no cumple la regla de validación regex: [0-9]{14}");
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='z-messagebox-window z-window-highlighted z-window-highlighted-shadow']//*[@class='z-messagebox-btn z-button-os']"))).click();
@@ -70,6 +72,7 @@ public class ClaveInvalida {
 		
 		//Logout
 		UsefulMethodsWF.logoutWF(driver);
+		driver.close();
 	}
 	
 	//@Test (priority=3)

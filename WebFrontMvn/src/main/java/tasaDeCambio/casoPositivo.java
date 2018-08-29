@@ -37,6 +37,7 @@ public class casoPositivo {
 	@Test (priority=2)
 	public void modifyExchangeRates() throws BiffException, IOException {
 		
+		UsefulMethodsWF.setDriver();
 		driver = UsefulMethodsWF.getDriver();
 		wait = new WebDriverWait(driver, 40);
 		
@@ -55,6 +56,7 @@ public class casoPositivo {
 		// Loop to modify the exchange rates
 		for (int i = 9; i < sh.getRows(); i++) {
 			// Clic on Modificar of exchange rate
+			wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//div[@class='z-modal-mask']")));
 			wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.className("z-button-cm"))).get(i-9).click();
 			wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.className("z-textbox"))).get(0).clear();
 			
@@ -105,6 +107,7 @@ public class casoPositivo {
 		}
 		
 		UsefulMethodsWF.logoutWF(driver);
+		driver.close();
 	}
 	
 	//@Test (priority=3)

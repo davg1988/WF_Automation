@@ -37,6 +37,7 @@ public class ValidacionCampos {
 	@Test (priority=2)
 	public void validateFields() throws Exception {
 		
+		UsefulMethodsWF.setDriver();
 		driver = UsefulMethodsWF.getDriver();
 		wait = new WebDriverWait(driver,45);
 		
@@ -84,7 +85,7 @@ public class ValidacionCampos {
 			}
 			
 			//Click on Confirmar button
-			driver.findElement(By.xpath("//*[@class='z-button-cm' and text()=' Confirmar']")).click();
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='z-button-cm' and text()=' Confirmar']"))).click();
 			String window_message = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath
 					("//*[@class='z-messagebox-window z-window-highlighted z-window-highlighted-shadow']"
 							+ "//*[@class='z-window-highlighted-header z-window-highlighted-header-move']"))).getText();
@@ -102,6 +103,7 @@ public class ValidacionCampos {
 			wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//*[@class='z-textbox' and @maxlength='20']")));
 		}	
 		UsefulMethodsWF.logoutWF(driver);
+		driver.close();
 	}
 	
 	//@Test (priority=3)

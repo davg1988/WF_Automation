@@ -41,6 +41,7 @@ public class CrearModificarEliminarUsuario {
 	RServiceClientFactory factory;
 
 	@BeforeTest
+	//@Test (priority=1)
 	public void launchWF() throws BiffException, IOException {
 		
 		// Configuring driver
@@ -52,7 +53,7 @@ public class CrearModificarEliminarUsuario {
 		UsefulMethodsWF.createWFTestUser(driver);	
 	}
 	
-	@Test (priority=6)
+	@Test (priority=2)
 	public void insertNewUser() throws Exception {
 		
 		long_login = UsefulMethodsWF.getLongLogin();
@@ -93,7 +94,7 @@ public class CrearModificarEliminarUsuario {
 		}		
 	}
 	
-	@Test (priority=7)
+	@Test (priority=3)
 	public void modifyUser() throws Exception {
 		
 		//variable that indicates the index of the register that is going to be checked
@@ -124,7 +125,7 @@ public class CrearModificarEliminarUsuario {
 		}		
 	}
 	
-	@Test (priority=8)
+	@Test (priority=4)
 	public void deleteUser() throws Exception {
 		
 		int count = 1;
@@ -136,19 +137,23 @@ public class CrearModificarEliminarUsuario {
 			count++;
 		}
 		UsefulMethodsWF.logoutWF(driver);
+		driver.close();
 	}
 	
 	@AfterTest
+	//@Test (priority=5)
 	public void closeWF() throws BiffException, IOException {
 		
+		UsefulMethodsWF.setDriver();
+		driver = UsefulMethodsWF.getDriver();
 		UsefulMethodsWF.deleteWFTestUser(driver);
-
 	}
 	
 	//********************* Methods **********************
 	
 	public static void deletePosOperator (WebDriver driver, String name) {
 		WebDriverWait wait = new WebDriverWait(driver, 45);
+		wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//div[@class='z-modal-mask']")));
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='z-listcell-cnt z-overflow-hidden' and text()=\""+name+"\"]"))).click();
 		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@class='z-button-cm'and text()=' Baja']"))).click();
 		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@class='z-messagebox-btn z-button-os' and text()='Yes']"))).click();
