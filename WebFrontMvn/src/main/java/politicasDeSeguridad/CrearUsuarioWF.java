@@ -1,7 +1,6 @@
 package politicasDeSeguridad;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import org.openqa.selenium.By;
@@ -14,7 +13,6 @@ import org.testng.annotations.Test;
 
 import jxl.Sheet;
 import jxl.Workbook;
-import jxl.read.biff.BiffException;
 import utilidades.UsefulMethodsWF;
 
 public class CrearUsuarioWF {
@@ -24,14 +22,6 @@ public class CrearUsuarioWF {
 	public Workbook wb;
 	public File fl;
 	public WebDriverWait wait;
-	
-	//@Test (priority=1)
-	public void launchWF() throws BiffException, IOException {
-		
-		UsefulMethodsWF.setDriver();
-		driver = UsefulMethodsWF.getDriver(); 
-		wait = new WebDriverWait(driver, 45);
-	}
 	
 	@Test (priority=2)
 	public void PositiveCase() throws Exception {
