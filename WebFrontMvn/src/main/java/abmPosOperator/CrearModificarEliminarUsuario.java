@@ -165,6 +165,7 @@ public class CrearModificarEliminarUsuario {
 		
 		// Click on Insertar button
 		wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(By.className("z-button-cm"), 2));
+		wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//div[@class='z-modal-mask']")));
 		driver.findElements(By.className("z-button-cm")).get(1).click();
 		
 		// Selecting the role of the operator
