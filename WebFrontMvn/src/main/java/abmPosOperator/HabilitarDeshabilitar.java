@@ -31,17 +31,6 @@ public class HabilitarDeshabilitar {
 	int line = 0;
 	List<Integer> registers = new ArrayList<>(10);
 	String long_login = "";
-	
-	//@Test (priority=1)
-	public void launchWF () throws BiffException, IOException {
-		
-		//Setting the driver
-		UsefulMethodsWF.setDriver();
-		wait = new WebDriverWait(driver,45);
-
-		//Create WF test user
-		//UsefulMethodsWF.createWFTestUser(driver);	//----------> Uncomment this line to execute this class alone
-	}
 
 	@Test (priority = 2)
 	public void disablePosOperator() throws Exception {
@@ -55,6 +44,9 @@ public class HabilitarDeshabilitar {
 		
 		//Instance of RServiceClientFactory
 		factory = new RServiceClientFactory();
+		
+		//Create WF test user
+		UsefulMethodsWF.createWFTestUser(driver);	//----------> Uncomment this line to execute this class alone
 		
 		fl = new File("Parametros\\AbmOperadoresPos\\Parametros.xls");
 		wb = Workbook.getWorkbook(fl);
@@ -134,8 +126,8 @@ public class HabilitarDeshabilitar {
 			CrearModificarEliminarUsuario.deletePosOperator(driver, name);
 		}
 		UsefulMethodsWF.logoutWF(driver);
-		//UsefulMethodsWF.deleteWFTestUser(driver); // --------> Uncomment this line when executing this class alone
-		driver.close(); // --------> Comment this sentence when executing this class alone
+		UsefulMethodsWF.deleteWFTestUser(driver); // --------> Uncomment this line when executing this class alone
+		//driver.close(); // --------> Comment this sentence when executing this class alone
 	}
 	
 	// **************************** METHODS USED IN THE CLASS *************************************
