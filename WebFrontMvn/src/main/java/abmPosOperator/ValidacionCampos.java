@@ -33,7 +33,7 @@ public class ValidacionCampos {
 		factory = new RServiceClientFactory();
 		
 		// Create WebFront test user
-		//UsefulMethodsWF.createWFTestUser(driver); // Uncomment this line when executing this class alone
+		//UsefulMethodsWF.createWFTestUser(driver); // -----> Uncomment this line when executing this class alone
 		
 		UsefulMethodsWF.loginWFTestUser(driver);
 		
@@ -95,7 +95,7 @@ public class ValidacionCampos {
 			wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//*[@class='z-textbox' and @maxlength='20']")));
 		}	
 		UsefulMethodsWF.logoutWF(driver);
-		//UsefulMethodsWF.deleteWFTestUser(driver); // Uncomment this line when executing this class alone
-		driver.close(); // Comment this line when executing this class alone
+		//UsefulMethodsWF.deleteWFTestUser(driver); // -----> Uncomment this line when executing this class alone
+		driver.close(); // -----> Comment this line when executing this class alone
 	}
 }

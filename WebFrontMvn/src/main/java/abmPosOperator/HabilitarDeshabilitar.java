@@ -40,7 +40,7 @@ public class HabilitarDeshabilitar {
 		wait = new WebDriverWait(driver,45);
 
 		//Create WF test user
-		//UsefulMethodsWF.createWFTestUser(driver);	//Uncomment this line to execute this class alone
+		//UsefulMethodsWF.createWFTestUser(driver);	//----------> Uncomment this line to execute this class alone
 	}
 
 	@Test (priority = 2)
@@ -134,8 +134,8 @@ public class HabilitarDeshabilitar {
 			CrearModificarEliminarUsuario.deletePosOperator(driver, name);
 		}
 		UsefulMethodsWF.logoutWF(driver);
-		//UsefulMethodsWF.deleteWFTestUser(driver); // Uncomment this line when executing this class alone
-		driver.close(); // Comment this sentence when executing this class alone
+		//UsefulMethodsWF.deleteWFTestUser(driver); // --------> Uncomment this line when executing this class alone
+		driver.close(); // --------> Comment this sentence when executing this class alone
 	}
 	
 	// **************************** METHODS USED IN THE CLASS *************************************

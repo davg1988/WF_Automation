@@ -28,7 +28,6 @@ public class SinCodigoLibre {
 	
 	//Objects to handle the browser
 	WebDriver driver;
-	//WebDriver driver;
 	WebDriverWait wait;
 	String url = "";
 	
@@ -45,7 +44,7 @@ public class SinCodigoLibre {
 		wait = new WebDriverWait(driver, 45);
 		
 		// Create WebFront test user
-		//UsefulMethodsWF.createWFTestUser(driver); // Uncomment this line when executing this class alone
+		//UsefulMethodsWF.createWFTestUser(driver); // ------> Uncomment this line when executing this class alone
 		
 		// Getting long of the personnel number
 		long_login = UsefulMethodsWF.getLongLogin();
@@ -155,7 +154,7 @@ public class SinCodigoLibre {
 			uFactory.updateCTLLine(line);
 		}
 		
-		//UsefulMethodsWF.deleteWFTestUser(driver); // Uncomment this line when executing this class alone
-		driver.close(); // Comment this line when executing this line alone
+		//UsefulMethodsWF.deleteWFTestUser(driver); // ------> Uncomment this line when executing this class alone
+		driver.close(); // -------> Comment this line when executing this line alone
 	}
 }
