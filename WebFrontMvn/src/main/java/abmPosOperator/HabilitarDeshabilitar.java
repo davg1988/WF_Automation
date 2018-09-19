@@ -40,7 +40,7 @@ public class HabilitarDeshabilitar {
 		wait = new WebDriverWait(driver,45);
 
 		//Create WF test user
-		//UsefulMethodsWF.createWFTestUser(driver);	
+		//UsefulMethodsWF.createWFTestUser(driver);	//Uncomment this line to execute this class alone
 	}
 
 	@Test (priority = 2)
@@ -134,13 +134,8 @@ public class HabilitarDeshabilitar {
 			CrearModificarEliminarUsuario.deletePosOperator(driver, name);
 		}
 		UsefulMethodsWF.logoutWF(driver);
-		driver.close();
-	}
-	
-	//@Test (priority=4)
-	public void closeWF() throws BiffException, IOException {
-		
-		UsefulMethodsWF.deleteWFTestUser(driver);
+		//UsefulMethodsWF.deleteWFTestUser(driver); // Uncomment this line when executing this class alone
+		driver.close(); // Comment this sentence when executing this class alone
 	}
 	
 	// **************************** METHODS USED IN THE CLASS *************************************
