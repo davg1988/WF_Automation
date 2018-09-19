@@ -25,15 +25,6 @@ public class ValidacionCampos {
 	File fl;
 	RServiceClientFactory factory;
 	
-	//@Test (priority=1)
-	public void launchWF() throws BiffException, IOException {
-		
-		//Setting driver
-		wait = new WebDriverWait(driver,45);
-			
-		UsefulMethodsWF.createWFTestUser(driver);
-	}
-	
 	@Test (priority=2)
 	public void validateFields() throws Exception {
 		
@@ -42,6 +33,9 @@ public class ValidacionCampos {
 		wait = new WebDriverWait(driver,45);
 		
 		factory = new RServiceClientFactory();
+		
+		// Create WebFront test user
+		//UsefulMethodsWF.createWFTestUser(driver); // Uncomment this line when executing this class alone
 		
 		UsefulMethodsWF.loginWFTestUser(driver);
 		
@@ -103,13 +97,7 @@ public class ValidacionCampos {
 			wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//*[@class='z-textbox' and @maxlength='20']")));
 		}	
 		UsefulMethodsWF.logoutWF(driver);
-		driver.close();
+		//UsefulMethodsWF.deleteWFTestUser(driver); // Uncomment this line when executing this class alone
+		driver.close(); // Comment this line when executing this class alone
 	}
-	
-	//@Test (priority=3)
-	public void deleteTestUser() throws BiffException, IOException {
-		
-		UsefulMethodsWF.deleteWFTestUser(driver);
-	}
-
 }
