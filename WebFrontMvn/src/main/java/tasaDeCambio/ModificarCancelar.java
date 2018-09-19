@@ -35,7 +35,7 @@ public class ModificarCancelar {
 		wb = Workbook.getWorkbook(fl);
 		sh = wb.getSheet("ModifyCancel");
 		
-		//UsefulMethodsWF.createWFTestUser(driver); // Uncomment this line when executing this class alone
+		//UsefulMethodsWF.createWFTestUser(driver); // -----> Uncomment this line when executing this class alone
 		UsefulMethodsWF.loginWFTestUser(driver);
 		
 		//Navigates to Tasa de Cambio 
@@ -120,7 +120,7 @@ public class ModificarCancelar {
 			wait.until(ExpectedConditions.elementToBeClickable(driver.findElements(By.xpath("//*[@class='z-toolbarbutton-cnt']")).get(4))).click();
 		}
 		UsefulMethodsWF.logoutWF(driver);
-		//UsefulMethodsWF.deleteWFTestUser(driver); // Uncomment this line when executing this class alone
-		driver.close(); // Comment this line when executing this class alone
+		//UsefulMethodsWF.deleteWFTestUser(driver); // -----> Uncomment this line when executing this class alone
+		driver.close(); // -----> Comment this line when executing this class alone
 	}
 }

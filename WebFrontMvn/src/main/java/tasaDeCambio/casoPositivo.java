@@ -29,7 +29,7 @@ public class casoPositivo {
 		UsefulMethodsWF.setDriver();
 		driver = UsefulMethodsWF.getDriver();
 		wait = new WebDriverWait(driver, 40);
-		//UsefulMethodsWF.createWFTestUser(driver); // Uncomment this line when executing this class alone
+		//UsefulMethodsWF.createWFTestUser(driver); // -----> Uncomment this line when executing this class alone
 
 		// Getting parameters
 		fl = new File("Parametros\\TasaDeCambio\\Parametros.xls");
@@ -99,7 +99,7 @@ public class casoPositivo {
 		}
 
 		UsefulMethodsWF.logoutWF(driver);
-		//UsefulMethodsWF.deleteWFTestUser(driver); // Uncomment this line when executing this class alone
-		driver.close(); // Comment this line when executing this class alone
+		//UsefulMethodsWF.deleteWFTestUser(driver); // -----> Uncomment this line when executing this class alone
+		driver.close(); // -----> Comment this line when executing this class alone
 	}
 }

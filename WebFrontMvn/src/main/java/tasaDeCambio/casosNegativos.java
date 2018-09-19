@@ -32,7 +32,7 @@ public class casosNegativos {
 		wait = new WebDriverWait(driver, 45);
 		
 		// Creation of test user to execute the test case
-		//UsefulMethodsWF.createWFTestUser(driver); // ----------> Uncomment this to run the class only
+		//UsefulMethodsWF.createWFTestUser(driver); // -----> Uncomment this to run the class only
 		
 		// Login with test user
 		UsefulMethodsWF.loginWFTestUser(driver);
@@ -101,9 +101,9 @@ public class casosNegativos {
 		UsefulMethodsWF.logoutWF(driver);
 		
 		// Close browser
-		driver.close(); // ---------> Comment this sentece to run the class only
+		driver.close(); // -----> Comment this sentece to run the class only
 		
 		// Delete test user
-		//UsefulMethodsWF.deleteWFTestUser(driver); // ----------> Uncomment this to run the class only
+		//UsefulMethodsWF.deleteWFTestUser(driver); // -----> Uncomment this to run the class only
 	}
 }
