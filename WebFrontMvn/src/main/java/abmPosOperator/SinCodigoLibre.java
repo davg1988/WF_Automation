@@ -36,18 +36,6 @@ public class SinCodigoLibre {
 	String long_login = "";
 	
 	UServiceClientFactory uFactory;
-	
-	//@Test (priority = 1)
-	public void launchWF() throws BiffException, IOException {
-		
-		// Setting driver
-		UsefulMethodsWF.setDriver();
-		driver = UsefulMethodsWF.getDriver();
-		wait = new WebDriverWait(driver, 45);
-		
-		// Create WebFront test user
-		UsefulMethodsWF.createWFTestUser(driver);
-	}
 
 	@Test (priority=2)
 	public void createCashierSupervisor() throws IOException, BiffException {
@@ -55,6 +43,9 @@ public class SinCodigoLibre {
 		UsefulMethodsWF.setDriver();
 		driver = UsefulMethodsWF.getDriver();
 		wait = new WebDriverWait(driver, 45);
+		
+		// Create WebFront test user
+		//UsefulMethodsWF.createWFTestUser(driver); // Uncomment this line when executing this class alone
 		
 		// Getting long of the personnel number
 		long_login = UsefulMethodsWF.getLongLogin();
@@ -163,12 +154,8 @@ public class SinCodigoLibre {
 			CTLLine line = new CTLLine(operator_code);
 			uFactory.updateCTLLine(line);
 		}
-		driver.close();
-	}
-
-	//@Test (priority=3)
-	public void deleteWFUser() throws BiffException, IOException {
 		
-		UsefulMethodsWF.deleteWFTestUser(driver);
+		//UsefulMethodsWF.deleteWFTestUser(driver); // Uncomment this line when executing this class alone
+		driver.close(); // Comment this line when executing this line alone
 	}
 }
