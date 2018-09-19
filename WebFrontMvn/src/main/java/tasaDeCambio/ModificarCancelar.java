@@ -23,17 +23,6 @@ public class ModificarCancelar {
 	Workbook wb;
 	Sheet sh;
 	
-	//@Test (priority=1)
-	public void launchWF() throws BiffException, IOException {
-		
-		//Setting Chrome browser
-		UsefulMethodsWF.setDriver();
-		driver = UsefulMethodsWF.getDriver();
-		wait = new WebDriverWait(driver, 45);
-
-		UsefulMethodsWF.createWFTestUser(driver);
-	}
-	
 	@Test (priority = 2)
 	public void modifyCancel() throws BiffException, IOException {
 		
@@ -46,6 +35,7 @@ public class ModificarCancelar {
 		wb = Workbook.getWorkbook(fl);
 		sh = wb.getSheet("ModifyCancel");
 		
+		//UsefulMethodsWF.createWFTestUser(driver); // Uncomment this line when executing this class alone
 		UsefulMethodsWF.loginWFTestUser(driver);
 		
 		//Navigates to Tasa de Cambio 
@@ -130,12 +120,7 @@ public class ModificarCancelar {
 			wait.until(ExpectedConditions.elementToBeClickable(driver.findElements(By.xpath("//*[@class='z-toolbarbutton-cnt']")).get(4))).click();
 		}
 		UsefulMethodsWF.logoutWF(driver);
-		driver.close();
-	}
-	
-	//@Test (priority=3)
-	public void closeWF() throws BiffException, IOException {
-		
-		UsefulMethodsWF.deleteWFTestUser(driver);
+		//UsefulMethodsWF.deleteWFTestUser(driver); // Uncomment this line when executing this class alone
+		driver.close(); // Comment this line when executing this class alone
 	}
 }
