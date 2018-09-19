@@ -31,7 +31,7 @@ public class ClaveInvalida {
 		wait = new WebDriverWait(driver, 45);
 		
 		// Create WebFront Test user
-		//UsefulMethodsWF.createWFTestUser(driver); // Uncomment this line when executing the class alone
+		//UsefulMethodsWF.createWFTestUser(driver); // -----> Uncomment this line when executing the class alone
 		
 		// Login with webfront test user
 		UsefulMethodsWF.loginWFTestUser(driver);
@@ -65,7 +65,7 @@ public class ClaveInvalida {
 		
 		//Logout
 		UsefulMethodsWF.logoutWF(driver);
-		//UsefulMethodsWF.deleteWFTestUser(driver); // Uncomment this line when executing this class alone
-		driver.close(); // Comment this line when executing this class alone
+		//UsefulMethodsWF.deleteWFTestUser(driver); // -----> Uncomment this line when executing this class alone
+		driver.close(); // -----> Comment this line when executing this class alone
 	}
 }
