@@ -1,7 +1,6 @@
 package abmPosOperator;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +13,6 @@ import org.testng.annotations.Test;
 
 import jxl.Sheet;
 import jxl.Workbook;
-import jxl.read.biff.BiffException;
 import utilidades.UsefulMethodsWF;
 import webFrontCommonUtils.RServiceClientFactory;
 
@@ -46,7 +44,7 @@ public class HabilitarDeshabilitar {
 		factory = new RServiceClientFactory();
 		
 		//Create WF test user
-		UsefulMethodsWF.createWFTestUser(driver);	//----------> Uncomment this line to execute this class alone
+		//UsefulMethodsWF.createWFTestUser(driver);	//----------> Uncomment this line to execute this class alone
 		
 		fl = new File("Parametros\\AbmOperadoresPos\\Parametros.xls");
 		wb = Workbook.getWorkbook(fl);
@@ -126,8 +124,8 @@ public class HabilitarDeshabilitar {
 			CrearModificarEliminarUsuario.deletePosOperator(driver, name);
 		}
 		UsefulMethodsWF.logoutWF(driver);
-		UsefulMethodsWF.deleteWFTestUser(driver); // --------> Uncomment this line when executing this class alone
-		//driver.close(); // --------> Comment this sentence when executing this class alone
+		//UsefulMethodsWF.deleteWFTestUser(driver); // --------> Uncomment this line when executing this class alone
+		driver.close(); // --------> Comment this sentence when executing this class alone
 	}
 	
 	// **************************** METHODS USED IN THE CLASS *************************************
