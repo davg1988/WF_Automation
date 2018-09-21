@@ -15,7 +15,7 @@ public class POSServerRestConnector {
 
 	public String get(String url) throws IOException, NotFoundException, InternalServerErrorException {
 
-		Request request = new Request.Builder().url(url).get().build();
+		Request request = new Request.Builder().addHeader("token", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIxIiwidmFsIjoiTVhPcGthS0xBeWJac3g3RFVuMmxTZz09IiwiaWF0IjoxNTM3Mjg1NDM5fQ.zhzKhLQMXH2olzpfZGVrZJ8ODJlXS4yuOvsVujiLhWI").url(url).get().build();
 
 		try (Response response = client.newCall(request).execute()) {
 
@@ -37,7 +37,7 @@ public class POSServerRestConnector {
 		if (body == null)
 			body = RequestBody.create(null, "");
 
-		Request request = new Request.Builder().url(url).put(body).build();
+		Request request = new Request.Builder().addHeader("token", "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIxIiwidmFsIjoiTVhPcGthS0xBeWJac3g3RFVuMmxTZz09IiwiaWF0IjoxNTM3Mjg1NDM5fQ.zhzKhLQMXH2olzpfZGVrZJ8ODJlXS4yuOvsVujiLhWI").url(url).put(body).build();
 
 		try (Response response = client.newCall(request).execute()) {
 

@@ -9,8 +9,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -22,27 +20,32 @@ import webFrontCommonUtils.RServiceClientFactory;
 
 public class TestingResults {
 
-	WebDriver driver;
+	//WebDriver driver;
 	public Sheet sh;
 	public Workbook wb;
 	public File fl;
-	public WebDriverWait wait;
+	//public WebDriverWait wait;
 	RServiceClientFactory factory;
 	
 	@Test (priority=1)
 	public void settingParameters() throws BiffException, IOException {
-		fl = new File("Parametros\\UserWatcher\\Parametros.xls");
+		fl = new File("Parametros\\EnvironmentParameters.xls");
 		wb = Workbook.getWorkbook(fl);
-		sh = wb.getSheet("PosOperatorsData");
-		String url = sh.getCell(1,2).getContents();
+		sh = wb.getSheet("Environment");
+		String url = sh.getCell(1,3).getContents();
 		
 		//Setting the IP for the clients of Rest Service
 		Environment.setEnv_ip(url);
+		//System.out.println("IP: "+Environment.getEnv_ip());
 		factory = new RServiceClientFactory();
 	}
 	
 	@Test (priority=4)
-	public void checkDbCtl() throws SQLException, IOException {
+	public void checkDbCtl() throws SQLException, IOException, BiffException {
+		
+		fl = new File("Parametros\\UserWatcher\\Parametros.xls");
+		wb = Workbook.getWorkbook(fl);
+		sh = wb.getSheet("PosOperatorsData");
 		
 		//Checking long of personnel number
 		String long_login = sh.getCell(3, 10).getContents();
@@ -72,11 +75,13 @@ public class TestingResults {
 				}
 			} else {
 				String name = sh.getCell(5,i).getContents();
-				//System.out.println("Nombre: " + name);
+				System.out.println("Nombre: " + name);
 				int line = Integer.parseInt(sh.getCell(0,i).getContents());
+				System.out.println("Linea: "+line);
 				//Check which operation is performed over the POS user, in order to determine the verification to be executed
 				if(sh.getCell(7,i).getContents().equals("1")) {
 					String login = sh.getCell(6,i).getContents();
+					System.out.println("login: "+ login);
 					verificationCreatedUser(name, login, factory, long_login, line);
 				} else {
 					verificationDeletedUser(name, factory, line);

@@ -174,4 +174,12 @@ public class DPTLine {
 		this.autoDiscountItemDiscPriceOverrideMixMatch = autoDiscountItemDiscPriceOverrideMixMatch;
 	}
 
+	public String getItemCounterDiscount() {
+		return itemCounterDiscount;
+	}
+
+	public void setItemCounterDiscount(String itemCounterDiscount) {
+		this.itemCounterDiscount = itemCounterDiscount;
+	}
+
 }

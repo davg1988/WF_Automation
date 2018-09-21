@@ -2,9 +2,9 @@ package webFrontCommonUtils;
 
 import java.io.IOException;
 
-import utilidades.Environment;
-
 //import org.apache.log4j.Logger;
+
+import utilidades.Environment;
 
 //import com.ncr.webfront.core.utils.logging.WebFrontLogger;
 //import com.ncr.webfront.core.utils.propertiesmapping.WebFrontMappingProperties;
@@ -12,8 +12,8 @@ import utilidades.Environment;
 public class IServiceClientFactory {
 
 	private POSServerRestConnector restConnector = new POSServerRestConnector();
-	//private String posServerRestfulBaseURL = /*WebFrontMappingProperties.getInstance().getPOSServerRestfulBaseURL() + */"http://153.72.48.136:12345/i_service";
-	private String posServerRestfulBaseURL = /*WebFrontMappingProperties.getInstance().getPOSServerRestfulBaseURL() + */"http://"+Environment.getEnv_ip()+":12345/i_service";
+	//private String posServerRestfulBaseURL = WebFrontMappingProperties.getInstance().getPOSServerRestfulBaseURL() + "/i_service";
+	private String posServerRestfulBaseURL = /*WebFrontMappingProperties.getInstance().getPOSServerRestfulBaseURL()*/"http://" + Environment.getEnv_ip() + ":12345/i_service";
 	//private final Logger logger = WebFrontLogger.getLogger(IServiceClientFactory.class);
 
 	public IServiceClientFactory() {

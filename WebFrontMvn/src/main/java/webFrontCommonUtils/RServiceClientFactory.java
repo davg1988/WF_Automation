@@ -7,6 +7,8 @@ import java.io.StringReader;
 //import org.apache.log4j.Logger;
 
 import com.google.gson.Gson;
+//import com.ncr.webfront.core.utils.logging.WebFrontLogger;
+//import com.ncr.webfront.core.utils.propertiesmapping.WebFrontMappingProperties;
 
 import utilidades.Environment;
 
@@ -14,8 +16,8 @@ public class RServiceClientFactory {
 
 	private POSServerRestConnector restConnector = new POSServerRestConnector();
 	private Gson gson = new Gson();
-	//private String posServerRestfulBaseURL = /*WebFrontMappingProperties.getInstance().getPOSServerRestfulBaseURL() + */"http://153.72.48.136:12345/r_service";
-	private String posServerRestfulBaseURL = /*WebFrontMappingProperties.getInstance().getPOSServerRestfulBaseURL() + */"http://"+Environment.getEnv_ip()+":12345/r_service";
+	//private String posServerRestfulBaseURL = WebFrontMappingProperties.getInstance().getPOSServerRestfulBaseURL() + "/r_service";
+	private String posServerRestfulBaseURL = /*WebFrontMappingProperties.getInstance().getPOSServerRestfulBaseURL()*/"http://" + Environment.getEnv_ip() + ":12345/r_service";
 	//private final Logger logger = WebFrontLogger.getLogger(RServiceClientFactory.class);
 
 	public RServiceClientFactory() {
@@ -171,6 +173,27 @@ public class RServiceClientFactory {
 		}
 	}
 
+	// Obtiene la funcion REG por Terminal
+	public REG getREGTerminal(int terminal) throws IOException {
+
+		String response;
+		try {
+
+			response = restConnector.get(posServerRestfulBaseURL + "/reg/" + terminal + "/0/0");
+
+			try (Reader reader = new StringReader(response)) {
+
+				// Convert JSON to Java Object
+				REG reg = gson.fromJson(reader, REG.class);
+				return reg;
+			}
+
+		} catch (NotFoundException | InternalServerErrorException e) {
+			//logger.error("An error occurred while trying to get the REG Cashier function. Details: " + e.getMessage());
+			return null;
+		}
+	}
+	
 	// Obtiene una linea de la funcion REG - Cashier
 	public REGLine getREGFunction(int terminal, int cashier, int rrn) throws IOException {
 

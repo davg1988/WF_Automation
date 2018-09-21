@@ -15,8 +15,8 @@ public class UServiceClientFactory {
 
 	private POSServerRestConnector restConnector = new POSServerRestConnector();
 	private Gson gson = new Gson();
-	//private String posServerRestfulBaseURL = /*WebFrontMappingProperties.getInstance().getPOSServerRestfulBaseURL() + */"http://153.72.48.136:12345/u_service";
-	private String posServerRestfulBaseURL = /*WebFrontMappingProperties.getInstance().getPOSServerRestfulBaseURL() + */"http://"+Environment.getEnv_ip()+":12345/u_service";
+	//private String posServerRestfulBaseURL = WebFrontMappingProperties.getInstance().getPOSServerRestfulBaseURL() + "/u_service";
+	private String posServerRestfulBaseURL = /*WebFrontMappingProperties.getInstance().getPOSServerRestfulBaseURL()*/"http://" + Environment.getEnv_ip() + ":12345/u_service";
 	//private final Logger logger = WebFrontLogger.getLogger(UServiceClientFactory.class);
 
 	public UServiceClientFactory() {
