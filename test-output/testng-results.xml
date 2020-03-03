@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results skipped="0" failed="0" total="2" passed="2">
+  <reporter-output>
+  </reporter-output>
+  <suite name="Default suite" duration-ms="4745" started-at="2018-07-05T17:13:49Z" finished-at="2018-07-05T17:13:54Z">
+    <groups>
+    </groups>
+    <test name="Default test" duration-ms="4745" started-at="2018-07-05T17:13:49Z" finished-at="2018-07-05T17:13:54Z">
+      <class name="abmPosOperator.Desbloquear">
+        <test-method status="PASS" signature="getParametersLaunchBrowser()[pri:0, instance:abmPosOperator.Desbloquear@7dc7cbad]" name="getParametersLaunchBrowser" duration-ms="4607" started-at="2018-07-05T14:13:49Z" finished-at="2018-07-05T14:13:54Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getParametersLaunchBrowser -->
+        <test-method status="PASS" signature="insertNewUsers()[pri:0, instance:abmPosOperator.Desbloquear@7dc7cbad]" name="insertNewUsers" duration-ms="118" started-at="2018-07-05T14:13:54Z" finished-at="2018-07-05T14:13:54Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- insertNewUsers -->
+      </class> <!-- abmPosOperator.Desbloquear -->
+    </test> <!-- Default test -->
+  </suite> <!-- Default suite -->
+</testng-results>
